@@ -4,4 +4,3 @@ Improved subscription timer
 Improved update system
 Added Online Updater
 Security Fix
-SJ Gaming Logo Coming
