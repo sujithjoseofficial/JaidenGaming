@@ -1,0 +1,3553 @@
+<html>
+<head>
+
+<title>JAIDEN GAMING</title>
+
+<HTA:APPLICATION
+    ID="JaidenGaming"
+    APPLICATIONNAME="Jaiden Gaming"
+    BORDER="thin"
+    CAPTION="yes"
+    SHOWINTASKBAR="yes"
+    SINGLEINSTANCE="yes"
+    SYSMENU="yes"
+    SCROLL="no"
+    WINDOWSTATE="normal"
+    MINIMIZEBUTTON="yes"
+    MAXIMIZEBUTTON="no"
+>
+
+<style type="text/css">
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #070a09;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.topbar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 70px;
+    background: #0c110f;
+    border-bottom: 1px solid #203128;
+}
+
+.brand {
+    position: absolute;
+    left: 25px;
+    top: 12px;
+    color: #00ff88;
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.brandSub {
+    color: white;
+    font-size: 16px;
+    letter-spacing: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.userArea {
+    position: absolute;
+    right: 25px;
+    top: 15px;
+    text-align: right;
+}
+
+.userName {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.online {
+    color: #00ff88;
+    font-size: 10px;
+    margin-top: 5px;
+    letter-spacing: 1px;
+}
+
+.sidebar {
+    position: absolute;
+    left: 0;
+    top: 70px;
+    bottom: 0;
+    width: 205px;
+    background: #0a0e0c;
+    border-right: 1px solid #1b2b23;
+    padding-top: 20px;
+}
+
+.menuHeader {
+    color: #555555;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    height: 16px;
+    line-height: 16px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.menuButton {
+    display: block;
+    width: 165px;
+    height: 42px;
+    margin: 6px auto;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    color: #999999;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    padding-left: 16px;
+    cursor: pointer;
+}
+
+.menuButton:hover {
+    background: #112019;
+    border-color: #20553b;
+    color: #00ff88;
+}
+
+.menuActive {
+    background: #10251a;
+    border-color: #17623e;
+    color: #00ff88;
+}
+
+.menuLine {
+    height: 1px;
+    background: #17211c;
+    width: 165px;
+    margin: 18px auto;
+}
+
+.exitButton {
+    display: block;
+    width: 165px;
+    height: 42px;
+    margin: 6px auto;
+    background: #241010;
+    border: 1px solid #512222;
+    border-radius: 5px;
+    color: #ff5555;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    padding-left: 16px;
+    cursor: pointer;
+}
+
+.exitButton:hover {
+    background: #401414;
+    border-color: #8b3030;
+}
+
+.content {
+    position: absolute;
+    left: 205px;
+    right: 0;
+    top: 70px;
+    bottom: 0;
+    padding: 28px;
+    overflow: hidden;
+}
+
+.smallTitle {
+    color: #666666;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 7px;
+}
+
+.mainTitle {
+    color: white;
+    font-size: 27px;
+    font-weight: bold;
+    margin-bottom: 24px;
+}
+
+.mainTitle span {
+    color: #00ff88;
+}
+
+.gameCard {
+    position: relative;
+    width: 96%;
+    height: 205px;
+    background: #0d1411;
+    border: 1px solid #1e3529;
+    border-radius: 8px;
+    padding: 25px;
+}
+
+.gameLabel {
+    color: #00ff88;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+.gameName {
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.gameDescription {
+    color: #777777;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.subscriptionButton {
+    position: absolute;
+    right: 25px;
+    top: 28px;
+    width: 210px;
+    height: 42px;
+    background: #10251a;
+    border: 1px solid #00ff88;
+    border-radius: 7px;
+    color: #00ff88;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.subscriptionButton:hover {
+    background: #17623e;
+    color: white;
+}
+
+.playButton {
+    position: absolute;
+    right: 25px;
+    top: 83px;
+    width: 210px;
+    height: 60px;
+    background: #00c853;
+    border: none;
+    border-radius: 7px;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.playButton:hover {
+    background: #00e866;
+}
+
+.statusPanel {
+    width: 96%;
+    height: 165px;
+    margin-top: 20px;
+    background: #0a0f0c;
+    border: 1px solid #19291f;
+    border-radius: 7px;
+}
+
+.statusHeader {
+    height: 42px;
+    padding: 15px 18px;
+    color: #666666;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    border-bottom: 1px solid #162019;
+}
+
+.statusRow {
+    height: 38px;
+    padding: 11px 18px;
+    font-size: 11px;
+}
+
+.statusName {
+    display: inline-block;
+    width: 220px;
+    color: #aaaaaa;
+}
+
+.ready {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.error {
+    color: #ff4444;
+    font-weight: bold;
+}
+
+.infoContainer {
+    width: 96%;
+    margin-top: 20px;
+}
+
+.infoCard {
+    display: inline-block;
+    width: 30%;
+    height: 75px;
+    margin-right: 2%;
+    background: #0d1310;
+    border: 1px solid #19281f;
+    border-radius: 6px;
+    padding: 14px;
+}
+
+.infoTitle {
+    color: #555555;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.infoValue {
+    color: #00ff88;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 13px;
+    left: 28px;
+    color: #3f4944;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.overlay {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #070a09;
+    z-index: 1000;
+}
+
+.updateBox {
+    position: absolute;
+    width: 470px;
+    left: 50%;
+    top: 50%;
+    margin-left: -235px;
+    margin-top: -190px;
+    padding: 42px 35px;
+    text-align: center;
+    background: #0c1310;
+    border: 1px solid #00ff88;
+    border-radius: 8px;
+}
+
+.updateBrand {
+    color: #00ff88;
+    font-size: 10px;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+}
+
+.updateTitle {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.updateText {
+    color: #888888;
+    font-size: 13px;
+    margin-bottom: 25px;
+}
+
+.updateAnimation {
+    width: 190px;
+    height: 35px;
+    margin: 0 auto 15px auto;
+}
+
+.updateAnimation span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 12px 5px 0 5px;
+    background: #00ff88;
+    border-radius: 50%;
+}
+
+.updateButton {
+    width: 175px;
+    height: 42px;
+    margin: 6px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.updateNow {
+    background: #00c853;
+    border: none;
+}
+
+.updateNow:hover {
+    background: #00e866;
+}
+
+.updateLater {
+    background: #242b27;
+    border: 1px solid #34443a;
+}
+
+.updateLater:hover {
+    background: #303b34;
+}
+
+.loginBox {
+    position: absolute;
+    width: 520px;
+    left: 50%;
+    top: 50%;
+    margin-left: -260px;
+    margin-top: -235px;
+    padding: 35px 45px;
+    background: #101512;
+    border: 1px solid #00ff88;
+    border-radius: 8px;
+    box-shadow: 0 0 35px #003d20;
+}
+
+.loginBrand {
+    color: #00ff88;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-align: center;
+    margin-bottom: 14px;
+}
+
+.loginTitle {
+    color: white;
+    text-align: center;
+    font-size: 23px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.loginDescription {
+    color: #777777;
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 27px;
+}
+
+.inputLabel {
+    color: #aaaaaa;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.loginInput {
+    display: block;
+    width: 100%;
+    height: 46px;
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #385043;
+    border-radius: 4px;
+    padding: 0 14px;
+    margin: 0 0 18px 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    outline: none;
+}
+
+.loginInput:focus {
+    border: 1px solid #00ff88;
+}
+
+.loginButton {
+    display: block;
+    width: 100%;
+    height: 45px;
+    background: #00c853;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.loginButton:hover {
+    background: #00e866;
+}
+
+.cancelButton {
+    display: block;
+    width: 100%;
+    height: 40px;
+    margin-top: 10px;
+    background: #1a211d;
+    border: 1px solid #29382f;
+    border-radius: 5px;
+    color: #aaaaaa;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.cancelButton:hover {
+    color: white;
+    background: #222c26;
+}
+
+.loginError {
+    display: none;
+    color: #ff4444;
+    font-size: 11px;
+    text-align: center;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.lockBox {
+    position: absolute;
+    width: 520px;
+    left: 50%;
+    top: 50%;
+    margin-left: -260px;
+    margin-top: -190px;
+    padding: 45px 35px;
+    text-align: center;
+    background: #0c1310;
+    border: 1px solid #ff3333;
+    border-radius: 8px;
+}
+
+.lockBrand {
+    color: #ff3333;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+}
+
+.lockTitle {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+
+.lockMessage {
+    color: #ff5555;
+    font-size: 13px;
+    line-height: 1.7;
+    font-weight: bold;
+}
+
+.lockSub {
+    color: #777777;
+    font-size: 11px;
+    margin-top: 20px;
+}
+
+.settingsBox {
+    position: absolute;
+    width: 560px;
+    left: 50%;
+    top: 50%;
+    margin-left: -280px;
+    margin-top: -230px;
+    padding: 30px;
+    background: #0c1310;
+    border: 1px solid #00ff88;
+    border-radius: 8px;
+}
+
+.settingsTitle {
+    color: #00ff88;
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 22px;
+}
+
+.settingRow {
+    display: table;
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    margin-bottom: 8px;
+    background: #0a0f0c;
+    border: 1px solid #19291f;
+    border-radius: 5px;
+}
+
+.settingName {
+    display: table-cell;
+    width: 190px;
+    color: #aaaaaa;
+    font-size: 11px;
+    font-weight: bold;
+    vertical-align: middle;
+    text-align: left;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.settingValue {
+    display: table-cell;
+    width: auto;
+    color: #00ff88;
+    font-size: 11px;
+    font-weight: bold;
+    vertical-align: middle;
+    text-align: left;
+    padding-left: 20px;
+    white-space: nowrap;
+}
+
+.closeSettings {
+    width: 100%;
+    height: 42px;
+    margin-top: 15px;
+    background: #1a211d;
+    border: 1px solid #29382f;
+    border-radius: 5px;
+    color: #aaaaaa;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.closeSettings:hover {
+    color: white;
+    background: #222c26;
+}
+
+
+/* SUBSCRIPTION */
+
+.subscriptionBox {
+    position: absolute;
+    width: 620px;
+    left: 50%;
+    top: 50%;
+    margin-left: -310px;
+    margin-top: -295px;
+    padding: 28px;
+    text-align: center;
+    background: #0c1310;
+    border: 1px solid #00ff88;
+    border-radius: 8px;
+    box-shadow: 0 0 35px #003d20;
+}
+
+.subscriptionBrand {
+    color: #00ff88;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+}
+
+.subscriptionTitle {
+    color: white;
+    font-size: 23px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.trialNotice {
+    color: #ffaa00;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.plan {
+    display: inline-block;
+    width: 47%;
+    height: 55px;
+    margin: 4px;
+    background: #0a0f0c;
+    border: 1px solid #1d3528;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    text-align: left;
+    padding: 0 15px;
+}
+
+.plan:hover {
+    background: #10251a;
+    border-color: #00ff88;
+}
+
+.planName {
+    display: inline-block;
+    width: 55%;
+    color: #aaaaaa;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 53px;
+}
+
+.planPrice {
+    display: inline-block;
+    width: 40%;
+    color: #00ff88;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.codeArea {
+    margin-top: 18px;
+    padding: 16px;
+    background: #0a0f0c;
+    border: 1px solid #19291f;
+    border-radius: 6px;
+}
+
+.codeTitle {
+    color: #aaaaaa;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    margin-bottom: 9px;
+}
+
+.codeInput {
+    width: 100%;
+    height: 42px;
+    background: white;
+    color: black;
+    border: 1px solid #385043;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 17px;
+    letter-spacing: 4px;
+    outline: none;
+}
+
+.selectedPlan {
+    color: #00ff88;
+    font-size: 11px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.codeError {
+    display: none;
+    color: #ff4444;
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.activateButton {
+    width: 100%;
+    height: 42px;
+    margin-top: 12px;
+    background: #00c853;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.activateButton:hover {
+    background: #00e866;
+}
+
+.subscriptionClose {
+    width: 100%;
+    height: 40px;
+    margin-top: 12px;
+    background: #1a211d;
+    border: 1px solid #29382f;
+    border-radius: 5px;
+    color: #aaaaaa;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.subscriptionClose:hover {
+    background: #222c26;
+    color: white;
+}
+
+.expiredBox {
+    position: absolute;
+    width: 500px;
+    left: 50%;
+    top: 50%;
+    margin-left: -250px;
+    margin-top: -190px;
+    padding: 45px 35px;
+    text-align: center;
+    background: #0c1310;
+    border: 1px solid #ff4444;
+    border-radius: 8px;
+}
+
+.expiredTitle {
+    color: #ff4444;
+    font-size: 23px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.expiredText {
+    color: #999999;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.expiredButton {
+    width: 210px;
+    height: 43px;
+    margin-top: 22px;
+    background: #00c853;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.timerActive {
+    color: #00ff88;
+}
+
+.timerExpired {
+    color: #ff4444;
+}
+
+
+/* WHATS NEW */
+
+.whatsNewBox {
+    margin: 18px auto 20px auto;
+    width: 100%;
+    padding: 17px 20px;
+    background: #09110d;
+    border: 1px solid #1d4b34;
+    border-radius: 7px;
+    text-align: left;
+}
+
+.whatsNewHeader {
+    color: #00ff88;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #183024;
+}
+
+.whatsNewContent {
+    color: #aaaaaa;
+    font-size: 12px;
+    line-height: 1.8;
+    white-space: normal;
+}
+
+.whatsNewContent div {
+    margin-bottom: 5px;
+}
+
+.whatsNewBullet {
+    color: #00ff88;
+    font-weight: bold;
+    margin-right: 7px;
+}
+
+</style>
+
+
+<script language="VBScript">
+
+Option Explicit
+
+Dim shell
+Dim fso
+
+Dim gameFolder
+Dim gtaExe
+Dim rageExe
+Dim launcherPath
+
+Dim updateFolder
+Dim updateFile
+Dim updateVersionFile
+Dim whatsNewFile
+Dim renamedUpdateFile
+
+Dim launcherVersion
+Dim updateVersion
+
+Dim adminID
+Dim adminPassword
+
+Dim loginIDPrefix
+Dim passwordPrefix
+
+Dim failedAttempts
+Dim settingsLocked
+
+Dim restartFlagFile
+
+
+'========================================================
+' SUBSCRIPTION VARIABLES
+'========================================================
+
+Dim subscriptionFolder
+Dim subscriptionFile
+
+Dim subscriptionPlan
+Dim subscriptionStart
+Dim subscriptionEnd
+
+Dim selectedPlan
+Dim selectedPrice
+Dim selectedSeconds
+
+Dim subscriptionActive
+
+Const ACTIVATION_CODE = "0000000000"
+
+' Lifetime uses a very large value.
+' Lifetime is also handled separately in CheckSubscription,
+' so it will never expire.
+Const LIFETIME_SECONDS = 9999999999
+
+
+Set shell = CreateObject("WScript.Shell")
+Set fso = CreateObject("Scripting.FileSystemObject")
+
+
+'========================================================
+' VERSION
+'========================================================
+
+launcherVersion = "1.0"
+updateVersion = ""
+
+
+'========================================================
+' PATHS
+'========================================================
+
+gameFolder = "D:\Games\Grand Theft Auto V"
+
+gtaExe = gameFolder & "\PlayGTAV.exe"
+
+rageExe = gameFolder & "\RAGEPluginHook.exe"
+
+launcherPath = _
+"C:\Users\sujo2\OneDrive\Documents\Jaiden Launcher\JaidenLauncher.hta"
+
+updateFolder = _
+"C:\Users\sujo2\OneDrive\Documents\Jaiden Launcher\Updates"
+
+updateFile = _
+updateFolder & "\JaidenLauncher.hta"
+
+updateVersionFile = _
+updateFolder & "\version.txt"
+
+whatsNewFile = _
+updateFolder & "\whatsnew.txt"
+
+renamedUpdateFile = _
+updateFolder & "\JaidenLauncher.hta 2"
+
+restartFlagFile = _
+shell.ExpandEnvironmentStrings("%TEMP%") & _
+"\JaidenGamingAutoUpdate.flag"
+
+
+'========================================================
+' SUBSCRIPTION STORAGE
+'========================================================
+
+subscriptionFolder = _
+shell.ExpandEnvironmentStrings("%APPDATA%") & _
+"\JaidenGaming"
+
+subscriptionFile = _
+subscriptionFolder & "\subscription.dat"
+
+
+subscriptionPlan = ""
+subscriptionStart = 0
+subscriptionEnd = 0
+subscriptionActive = False
+
+selectedPlan = ""
+selectedPrice = 0
+selectedSeconds = 0
+
+
+'========================================================
+' LOGIN
+'========================================================
+
+loginIDPrefix = "1111111111111111111111"
+
+passwordPrefix = "11111111111111111111"
+
+adminID = loginIDPrefix & "SJGAMING"
+
+adminPassword = passwordPrefix & "4848"
+
+failedAttempts = 0
+settingsLocked = False
+
+
+'========================================================
+' WINDOW LOAD
+'========================================================
+
+Sub Window_OnLoad
+
+    LoadSubscription
+
+    CheckSubscription
+
+    CheckStatus
+
+    SetVersionDisplay
+
+    If fso.FileExists(restartFlagFile) Then
+
+        On Error Resume Next
+
+        fso.DeleteFile restartFlagFile, True
+
+        On Error GoTo 0
+
+        window.setTimeout "AutoOpenUpdates", 1200
+
+    Else
+
+        window.setTimeout "AutoOpenUpdates", 1200
+
+    End If
+
+End Sub
+
+
+'========================================================
+' AUTOMATIC UPDATE CHECK
+'========================================================
+
+Sub AutoOpenUpdates
+
+    CheckForUpdatesSilent
+
+End Sub
+
+
+Sub CheckForUpdatesSilent
+
+    Dim ts
+    Dim localNumber
+    Dim remoteNumber
+    Dim remoteVersionText
+
+    If Not fso.FileExists(updateFile) Then
+
+        Exit Sub
+
+    End If
+
+    remoteVersionText = ""
+
+
+    If fso.FileExists(updateVersionFile) Then
+
+        On Error Resume Next
+
+        Set ts = fso.OpenTextFile( _
+            updateVersionFile, _
+            1, _
+            False)
+
+        If Err.Number = 0 Then
+
+            If Not ts.AtEndOfStream Then
+
+                remoteVersionText = Trim(ts.ReadLine)
+
+            End If
+
+            ts.Close
+
+        End If
+
+        Err.Clear
+
+        On Error GoTo 0
+
+    End If
+
+
+    If remoteVersionText = "" Then
+
+        Exit Sub
+
+    End If
+
+
+    updateVersion = remoteVersionText
+
+    localNumber = GetVersionNumber(launcherVersion)
+
+    remoteNumber = GetVersionNumber(updateVersion)
+
+
+    If remoteNumber > localNumber Then
+
+        CheckForUpdates
+
+    End If
+
+End Sub
+
+
+'========================================================
+' STATUS
+'========================================================
+
+Sub CheckStatus
+
+    If fso.FileExists(gtaExe) Then
+
+        document.getElementById("gtaStatus").innerHTML = _
+            "<span class='ready'>READY</span>"
+
+    Else
+
+        document.getElementById("gtaStatus").innerHTML = _
+            "<span class='error'>NOT FOUND</span>"
+
+    End If
+
+
+    If fso.FileExists(rageExe) Then
+
+        document.getElementById("sjStatus").innerHTML = _
+            "<span class='ready'>READY</span>"
+
+    Else
+
+        document.getElementById("sjStatus").innerHTML = _
+            "<span class='error'>NOT FOUND</span>"
+
+    End If
+
+End Sub
+
+
+'========================================================
+' PLAY GAME
+'========================================================
+
+Sub PlayGame
+
+    CheckSubscription
+
+    If subscriptionActive = False Then
+
+        OpenSubscription
+
+        Exit Sub
+
+    End If
+
+
+    If Not fso.FileExists(gtaExe) Then
+
+        MsgBox _
+            "GTA V was not found." & vbCrLf & vbCrLf & _
+            gtaExe, _
+            vbCritical, _
+            "JAIDEN GAMING"
+
+        Exit Sub
+
+    End If
+
+
+    If Not fso.FileExists(rageExe) Then
+
+        MsgBox _
+            "SJ Gaming component was not found." & _
+            vbCrLf & vbCrLf & rageExe, _
+            vbCritical, _
+            "JAIDEN GAMING"
+
+        Exit Sub
+
+    End If
+
+
+    document.getElementById("playButton").disabled = True
+
+    document.getElementById("loadingScreen").style.display = "block"
+
+    document.getElementById("loadingStatus").innerHTML = _
+        "STARTING GRAND THEFT AUTO V"
+
+
+    shell.CurrentDirectory = gameFolder
+
+    shell.Run """" & gtaExe & """", 1, False
+
+    window.setTimeout "StartSJGaming", 10000
+
+End Sub
+
+
+Sub StartSJGaming
+
+    document.getElementById("loadingStatus").innerHTML = _
+        "STARTING SJ GAMING"
+
+    shell.CurrentDirectory = gameFolder
+
+    shell.Run """" & rageExe & """", 1, False
+
+    window.setTimeout "LaunchComplete", 1500
+
+End Sub
+
+
+Sub LaunchComplete
+
+    document.getElementById("loadingStatus").innerHTML = _
+        "LAUNCH COMPLETE"
+
+    window.setTimeout "CloseLauncher", 1000
+
+End Sub
+
+
+Sub CloseLauncher
+
+    window.close
+
+End Sub
+
+
+'========================================================
+' GAME FOLDER
+'========================================================
+
+Sub OpenGameFolder
+
+    If fso.FolderExists(gameFolder) Then
+
+        shell.Run _
+            "explorer.exe """ & gameFolder & """", _
+            1, _
+            False
+
+    Else
+
+        MsgBox _
+            "Game folder was not found." & _
+            vbCrLf & vbCrLf & gameFolder, _
+            vbCritical, _
+            "JAIDEN GAMING"
+
+    End If
+
+End Sub
+
+
+'========================================================
+' UPDATE CHECK
+'========================================================
+
+Sub CheckForUpdates
+
+    document.getElementById("updateOverlay").style.display = "block"
+
+    document.getElementById("updateChecking").style.display = "block"
+
+    document.getElementById("updateAvailable").style.display = "none"
+
+    document.getElementById("updateInstalling").style.display = "none"
+
+    document.getElementById("updateCompleted").style.display = "none"
+
+    document.getElementById("updateText").innerHTML = _
+        "Checking for updates..."
+
+    window.setTimeout "CheckUpdateFile", 1200
+
+End Sub
+
+
+Sub CheckUpdateFile
+
+    Dim ts
+    Dim localNumber
+    Dim remoteNumber
+    Dim remoteVersionText
+
+    document.getElementById("updateChecking").style.display = "none"
+
+    Set fso = CreateObject("Scripting.FileSystemObject")
+
+
+    If Not fso.FileExists(updateFile) Then
+
+        document.getElementById("updateText").innerHTML = _
+            "No update is available." & _
+            "<br><br>" & _
+            "Current Version: v" & launcherVersion
+
+        window.setTimeout "CloseUpdateAfterCheck", 2500
+
+        Exit Sub
+
+    End If
+
+
+    remoteVersionText = ""
+
+
+    If fso.FileExists(updateVersionFile) Then
+
+        On Error Resume Next
+
+        Set ts = fso.OpenTextFile( _
+            updateVersionFile, _
+            1, _
+            False)
+
+        If Err.Number = 0 Then
+
+            If Not ts.AtEndOfStream Then
+
+                remoteVersionText = Trim(ts.ReadLine)
+
+            End If
+
+            ts.Close
+
+        End If
+
+        Err.Clear
+
+        On Error GoTo 0
+
+    End If
+
+
+    If remoteVersionText = "" Then
+
+        updateVersion = ""
+
+        document.getElementById("updateAvailable").style.display = "block"
+
+        document.getElementById("updateText").innerHTML = _
+            "NEW UPDATE FILE FOUND"
+
+        LoadWhatsNew
+
+        Exit Sub
+
+    End If
+
+
+    updateVersion = remoteVersionText
+
+    localNumber = GetVersionNumber(launcherVersion)
+
+    remoteNumber = GetVersionNumber(updateVersion)
+
+
+    If remoteNumber > localNumber Then
+
+        document.getElementById("updateAvailable").style.display = "block"
+
+        document.getElementById("updateText").innerHTML = _
+            "NEW VERSION AVAILABLE" & _
+            "<br><br>" & _
+            "Installed: v" & launcherVersion & _
+            "<br>" & _
+            "Available: v" & updateVersion
+
+        LoadWhatsNew
+
+        Exit Sub
+
+    End If
+
+
+    If remoteNumber = localNumber Then
+
+        document.getElementById("updateText").innerHTML = _
+            "Your JAIDEN GAMING launcher is up to date." & _
+            "<br><br>" & _
+            "Current Version: v" & launcherVersion
+
+        window.setTimeout "CloseUpdateAfterCheck", 3000
+
+        Exit Sub
+
+    End If
+
+
+    document.getElementById("updateText").innerHTML = _
+        "No newer update is available." & _
+        "<br><br>" & _
+        "Installed: v" & launcherVersion & _
+        "<br>" & _
+        "Update file: v" & updateVersion
+
+    window.setTimeout "CloseUpdateAfterCheck", 3000
+
+End Sub
+
+
+'========================================================
+' WHAT'S NEW
+'========================================================
+
+Sub LoadWhatsNew
+
+    Dim ts
+    Dim line
+    Dim whatsNewHTML
+
+    whatsNewHTML = ""
+
+    If fso.FileExists(whatsNewFile) Then
+
+        On Error Resume Next
+
+        Set ts = fso.OpenTextFile( _
+            whatsNewFile, _
+            1, _
+            False)
+
+        If Err.Number = 0 Then
+
+            Do Until ts.AtEndOfStream
+
+                line = Trim(ts.ReadLine)
+
+                If line <> "" Then
+
+                    whatsNewHTML = whatsNewHTML & _
+                        "<div>" & _
+                        "<span class='whatsNewBullet'>+</span>" & _
+                        HtmlEncode(line) & _
+                        "</div>"
+
+                End If
+
+            Loop
+
+            ts.Close
+
+        End If
+
+        Err.Clear
+
+        On Error GoTo 0
+
+    End If
+
+
+    If whatsNewHTML = "" Then
+
+        whatsNewHTML = _
+            "<div>" & _
+            "<span class='whatsNewBullet'>+</span>" & _
+            "New launcher improvements and fixes" & _
+            "</div>"
+
+    End If
+
+
+    document.getElementById("whatsNewContent").innerHTML = _
+        whatsNewHTML
+
+End Sub
+
+
+Function HtmlEncode(value)
+
+    value = Replace(value, "&", "&amp;")
+    value = Replace(value, "<", "&lt;")
+    value = Replace(value, ">", "&gt;")
+    value = Replace(value, """", "&quot;")
+
+    HtmlEncode = value
+
+End Function
+
+
+Function GetVersionNumber(versionText)
+
+    Dim parts
+    Dim major
+    Dim minor
+    Dim patch
+    Dim cleanVersion
+
+    cleanVersion = Trim(versionText)
+
+    If LCase(Left(cleanVersion, 1)) = "v" Then
+
+        cleanVersion = Mid(cleanVersion, 2)
+
+    End If
+
+    parts = Split(cleanVersion, ".")
+
+    major = 0
+    minor = 0
+    patch = 0
+
+
+    If UBound(parts) >= 0 Then
+
+        If IsNumeric(parts(0)) Then
+
+            major = CInt(parts(0))
+
+        End If
+
+    End If
+
+
+    If UBound(parts) >= 1 Then
+
+        If IsNumeric(parts(1)) Then
+
+            minor = CInt(parts(1))
+
+        End If
+
+    End If
+
+
+    If UBound(parts) >= 2 Then
+
+        If IsNumeric(parts(2)) Then
+
+            patch = CInt(parts(2))
+
+        End If
+
+    End If
+
+
+    GetVersionNumber = _
+        (major * 10000) + _
+        (minor * 100) + _
+        patch
+
+End Function
+
+
+Sub CloseUpdateAfterCheck
+
+    document.getElementById("updateOverlay").style.display = "none"
+
+End Sub
+
+
+'========================================================
+' UPDATE NOW
+'========================================================
+
+Sub UpdateNow
+
+    If Not fso.FileExists(updateFile) Then
+
+        MsgBox _
+            "No update file was found." & _
+            vbCrLf & vbCrLf & _
+            updateFile, _
+            vbExclamation, _
+            "JAIDEN GAMING"
+
+        Exit Sub
+
+    End If
+
+
+    document.getElementById("updateAvailable").style.display = "none"
+
+    document.getElementById("updateInstalling").style.display = "block"
+
+    document.getElementById("updateText").innerHTML = _
+        "INSTALLING UPDATE..."
+
+    window.setTimeout "PerformUpdate", 700
+
+End Sub
+
+
+Sub PerformUpdate
+
+    Dim errorText
+
+    On Error Resume Next
+
+    Err.Clear
+
+
+    If fso.FileExists(renamedUpdateFile) Then
+
+        fso.DeleteFile renamedUpdateFile, True
+
+    End If
+
+
+    Err.Clear
+
+
+    fso.CopyFile _
+        updateFile, _
+        launcherPath, _
+        True
+
+
+    If Err.Number <> 0 Then
+
+        errorText = Err.Description
+
+        On Error GoTo 0
+
+        document.getElementById("updateInstalling").style.display = "none"
+
+        MsgBox _
+            "The update could not be installed." & _
+            vbCrLf & vbCrLf & _
+            errorText, _
+            vbCritical, _
+            "JAIDEN GAMING"
+
+        document.getElementById("updateOverlay").style.display = "none"
+
+        Exit Sub
+
+    End If
+
+
+    Err.Clear
+
+
+    fso.MoveFile _
+        updateFile, _
+        renamedUpdateFile
+
+
+    On Error GoTo 0
+
+
+    document.getElementById("updateInstalling").style.display = "none"
+
+    document.getElementById("updateCompleted").style.display = "block"
+
+    document.getElementById("updateText").innerHTML = _
+        "UPDATE COMPLETED"
+
+    window.setTimeout "RestartLauncher", 3000
+
+End Sub
+
+
+Sub UpdateLater
+
+    document.getElementById("updateOverlay").style.display = "none"
+
+End Sub
+
+
+'========================================================
+' RESTART
+'========================================================
+
+Sub RestartLauncher
+
+    Dim tempVbs
+    Dim ts
+    Dim vbsCode
+    Dim newLauncher
+
+    newLauncher = launcherPath
+
+    tempVbs = _
+        shell.ExpandEnvironmentStrings("%TEMP%") & _
+        "\JaidenGamingRestart.vbs"
+
+
+    On Error Resume Next
+
+    If fso.FileExists(restartFlagFile) Then
+
+        fso.DeleteFile restartFlagFile, True
+
+    End If
+
+    fso.CreateTextFile restartFlagFile, True
+
+    On Error GoTo 0
+
+
+    vbsCode = ""
+
+    vbsCode = vbsCode & _
+        "Set sh = CreateObject(""WScript.Shell"")" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "WScript.Sleep 2000" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "sh.Run ""mshta.exe "" & Chr(34) & """ & _
+        newLauncher & """ & Chr(34), 1, False" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "WScript.Sleep 5000" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "On Error Resume Next" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "CreateObject(""Scripting.FileSystemObject"").DeleteFile WScript.ScriptFullName, True" & vbCrLf
+
+
+    Set ts = fso.CreateTextFile(tempVbs, True)
+
+    ts.Write vbsCode
+
+    ts.Close
+
+
+    shell.Run _
+        "wscript.exe """ & tempVbs & """", _
+        0, _
+        False
+
+    window.close
+
+End Sub
+
+
+'========================================================
+' SETTINGS
+'========================================================
+
+Sub OpenSettings
+
+    If settingsLocked = True Then
+
+        document.getElementById("lockOverlay").style.display = "block"
+
+        Exit Sub
+
+    End If
+
+
+    document.getElementById("loginOverlay").style.display = "block"
+
+    document.getElementById("loginID").value = loginIDPrefix
+
+    document.getElementById("loginPassword").value = passwordPrefix
+
+    document.getElementById("loginError").style.display = "none"
+
+    window.setTimeout "FocusLogin", 100
+
+End Sub
+
+
+Sub FocusLogin
+
+    document.getElementById("loginID").focus
+
+End Sub
+
+
+Sub ProtectLoginID
+
+    Dim box
+    Dim value
+
+    Set box = document.getElementById("loginID")
+
+    value = box.value
+
+
+    If Len(value) < Len(loginIDPrefix) Then
+
+        LockSecurity
+
+        Exit Sub
+
+    End If
+
+
+    If Left(value, Len(loginIDPrefix)) <> loginIDPrefix Then
+
+        LockSecurity
+
+        Exit Sub
+
+    End If
+
+End Sub
+
+
+Sub ProtectPassword
+
+    Dim box
+    Dim value
+
+    Set box = document.getElementById("loginPassword")
+
+    value = box.value
+
+
+    If Len(value) < Len(passwordPrefix) Then
+
+        LockSecurity
+
+        Exit Sub
+
+    End If
+
+
+    If Left(value, Len(passwordPrefix)) <> passwordPrefix Then
+
+        LockSecurity
+
+        Exit Sub
+
+    End If
+
+End Sub
+
+
+Sub LockSecurity
+
+    settingsLocked = True
+
+    document.getElementById("loginOverlay").style.display = "none"
+
+    document.getElementById("lockOverlay").style.display = "block"
+
+End Sub
+
+
+Sub AdminLogin
+
+    Dim enteredID
+    Dim enteredPassword
+
+    If settingsLocked = True Then Exit Sub
+
+    ProtectLoginID
+
+    If settingsLocked = True Then Exit Sub
+
+    ProtectPassword
+
+    If settingsLocked = True Then Exit Sub
+
+
+    enteredID = _
+        document.getElementById("loginID").value
+
+    enteredPassword = _
+        document.getElementById("loginPassword").value
+
+
+    If UCase(Trim(enteredID)) = _
+       UCase(adminID) _
+       And enteredPassword = adminPassword Then
+
+
+        failedAttempts = 0
+
+        document.getElementById("loginOverlay").style.display = "none"
+
+
+        If fso.FileExists(launcherPath) Then
+
+            shell.Run _
+                "notepad.exe """ & launcherPath & """", _
+                1, _
+                False
+
+        Else
+
+            MsgBox _
+                "JaidenLauncher.hta was not found." & _
+                vbCrLf & vbCrLf & _
+                launcherPath, _
+                vbCritical, _
+                "JAIDEN GAMING"
+
+        End If
+
+        Exit Sub
+
+    End If
+
+
+    failedAttempts = failedAttempts + 1
+
+    document.getElementById("loginError").style.display = "block"
+
+    document.getElementById("loginError").innerHTML = _
+        "ACCESS DENIED - INVALID LOGIN ID OR PASSWORD"
+
+    document.getElementById("loginPassword").value = passwordPrefix
+
+
+    If failedAttempts >= 3 Then
+
+        settingsLocked = True
+
+        document.getElementById("loginOverlay").style.display = "none"
+
+        document.getElementById("lockOverlay").style.display = "block"
+
+        Exit Sub
+
+    End If
+
+
+    document.getElementById("loginID").focus
+
+End Sub
+
+
+Sub CancelLogin
+
+    document.getElementById("loginOverlay").style.display = "none"
+
+End Sub
+
+
+Sub CloseSettings
+
+    document.getElementById("settingsOverlay").style.display = "none"
+
+End Sub
+
+
+Sub CloseLockScreen
+
+    document.getElementById("lockOverlay").style.display = "none"
+
+End Sub
+
+
+'========================================================
+' SUBSCRIPTION
+'========================================================
+
+Sub OpenSubscription
+
+    CheckSubscription
+
+    document.getElementById("subscriptionOverlay").style.display = "block"
+
+    UpdateSubscriptionWindow
+
+End Sub
+
+
+Sub CloseSubscription
+
+    document.getElementById("subscriptionOverlay").style.display = "none"
+
+End Sub
+
+
+'========================================================
+' PLAN SELECTION
+'========================================================
+
+Sub SelectPlan(planName, price, seconds)
+
+    selectedPlan = planName
+    selectedPrice = price
+    selectedSeconds = seconds
+
+
+    document.getElementById("selectedPlan").innerHTML = _
+        "SELECTED: " & selectedPlan & _
+        " - AED " & selectedPrice
+
+
+    document.getElementById("codeError").style.display = "none"
+
+    document.getElementById("activationCode").focus
+
+End Sub
+
+
+Sub SelectOneMinute
+
+    SelectPlan "1 MINUTE", 1, 60
+
+End Sub
+
+
+Sub SelectOneDay
+
+    SelectPlan "1 HOUR", 30, 3600
+
+End Sub
+
+
+Sub SelectThreeDays
+
+    SelectPlan "3 HOURS", 50, 10800
+
+End Sub
+
+
+Sub SelectSevenDays
+
+    SelectPlan "7 DAYS", 70, 604800
+
+End Sub
+
+
+Sub SelectOneMonth
+
+    SelectPlan "1 MONTH", 100, 2592000
+
+End Sub
+
+
+Sub SelectSixMonths
+
+    SelectPlan "6 MONTHS", 500, 15552000
+
+End Sub
+
+
+Sub SelectOneYear
+
+    SelectPlan "1 YEAR", 1000, 31536000
+
+End Sub
+
+
+'========================================================
+' LIFETIME PLAN
+'========================================================
+
+Sub SelectLifetime
+
+    selectedPlan = "LIFETIME"
+    selectedPrice = 3000
+    selectedSeconds = LIFETIME_SECONDS
+
+
+    document.getElementById("selectedPlan").innerHTML = _
+        "SELECTED: LIFETIME - AED 3,000"
+
+
+    document.getElementById("codeError").style.display = "none"
+
+    document.getElementById("activationCode").focus
+
+End Sub
+
+
+'========================================================
+' ACTIVATE SUBSCRIPTION
+'========================================================
+
+Sub ActivateSubscription
+
+    Dim enteredCode
+
+    enteredCode = _
+        Trim(document.getElementById("activationCode").value)
+
+
+    If selectedPlan = "" Then
+
+        document.getElementById("codeError").style.display = "block"
+
+        document.getElementById("codeError").innerHTML = _
+            "PLEASE SELECT A SUBSCRIPTION PLAN FIRST."
+
+        Exit Sub
+
+    End If
+
+
+    If enteredCode <> ACTIVATION_CODE Then
+
+        document.getElementById("codeError").style.display = "block"
+
+        document.getElementById("codeError").innerHTML = _
+            "INVALID ACTIVATION CODE. PLEASE ENTER THE CORRECT 10-DIGIT CODE."
+
+        Exit Sub
+
+    End If
+
+
+    subscriptionPlan = selectedPlan
+
+    subscriptionStart = UnixTime()
+
+
+    If UCase(subscriptionPlan) = "LIFETIME" Then
+
+        subscriptionEnd = 0
+
+    Else
+
+        subscriptionEnd = _
+            subscriptionStart + selectedSeconds
+
+    End If
+
+
+    subscriptionActive = True
+
+
+    SaveSubscription
+
+
+    document.getElementById("codeError").style.display = "none"
+
+    document.getElementById("activationCode").value = ""
+
+
+    UpdateSubscriptionDisplay
+
+    UpdateSubscriptionWindow
+
+
+    MsgBox _
+        "Subscription activated successfully!" & _
+        vbCrLf & vbCrLf & _
+        "Plan: " & subscriptionPlan & _
+        vbCrLf & _
+        "Price: AED " & selectedPrice & _
+        vbCrLf & vbCrLf & _
+        "Your subscription is now active.", _
+        vbInformation, _
+        "JAIDEN GAMING"
+
+End Sub
+
+
+'========================================================
+' SAVE SUBSCRIPTION
+'========================================================
+
+Sub SaveSubscription
+
+    Dim ts
+
+    On Error Resume Next
+
+    If Not fso.FolderExists(subscriptionFolder) Then
+
+        fso.CreateFolder subscriptionFolder
+
+    End If
+
+
+    Set ts = fso.CreateTextFile(subscriptionFile, True)
+
+    ts.WriteLine subscriptionPlan
+
+    ts.WriteLine CStr(subscriptionStart)
+
+    ts.WriteLine CStr(subscriptionEnd)
+
+    ts.Close
+
+    On Error GoTo 0
+
+End Sub
+
+
+'========================================================
+' LOAD SUBSCRIPTION
+'========================================================
+
+Sub LoadSubscription
+
+    Dim ts
+
+    subscriptionPlan = ""
+    subscriptionStart = 0
+    subscriptionEnd = 0
+    subscriptionActive = False
+
+
+    If Not fso.FileExists(subscriptionFile) Then
+
+        Exit Sub
+
+    End If
+
+
+    On Error Resume Next
+
+
+    Set ts = fso.OpenTextFile( _
+        subscriptionFile, _
+        1, _
+        False)
+
+
+    If Err.Number <> 0 Then
+
+        Err.Clear
+
+        On Error GoTo 0
+
+        Exit Sub
+
+    End If
+
+
+    If Not ts.AtEndOfStream Then
+
+        subscriptionPlan = Trim(ts.ReadLine)
+
+    End If
+
+
+    If Not ts.AtEndOfStream Then
+
+        subscriptionStart = CDbl(Trim(ts.ReadLine))
+
+    End If
+
+
+    If Not ts.AtEndOfStream Then
+
+        subscriptionEnd = CDbl(Trim(ts.ReadLine))
+
+    End If
+
+
+    ts.Close
+
+
+    On Error GoTo 0
+
+End Sub
+
+
+'========================================================
+' CHECK SUBSCRIPTION
+'========================================================
+
+Sub CheckSubscription
+
+    '====================================================
+    ' LIFETIME NEVER EXPIRES
+    '====================================================
+
+    If UCase(Trim(subscriptionPlan)) = "LIFETIME" Then
+
+        subscriptionActive = True
+
+        UpdateSubscriptionDisplay
+
+        Exit Sub
+
+    End If
+
+
+    '====================================================
+    ' NORMAL TIME-BASED SUBSCRIPTIONS
+    '====================================================
+
+    If subscriptionEnd <= 0 Then
+
+        subscriptionActive = False
+
+        UpdateSubscriptionDisplay
+
+        Exit Sub
+
+    End If
+
+
+    If UnixTime() >= subscriptionEnd Then
+
+        If subscriptionActive = True Then
+
+            subscriptionActive = False
+
+            SaveSubscription
+
+            ShowExpiredScreen
+
+        Else
+
+            subscriptionActive = False
+
+        End If
+
+    Else
+
+        subscriptionActive = True
+
+    End If
+
+
+    UpdateSubscriptionDisplay
+
+End Sub
+
+
+'========================================================
+' UPDATE DASHBOARD STATUS
+'========================================================
+
+Sub UpdateSubscriptionDisplay
+
+    Dim remaining
+
+
+    If subscriptionActive = True Then
+
+        document.getElementById("subscriptionStatus").innerHTML = _
+            "<span class='ready'>ACTIVE</span>"
+
+
+        document.getElementById("subscriptionPlanDisplay").innerHTML = _
+            subscriptionPlan
+
+
+        If UCase(Trim(subscriptionPlan)) = "LIFETIME" Then
+
+            document.getElementById("subscriptionTimeDisplay").innerHTML = _
+                "LIFETIME"
+
+        Else
+
+            remaining = subscriptionEnd - UnixTime()
+
+            If remaining < 0 Then remaining = 0
+
+            document.getElementById("subscriptionTimeDisplay").innerHTML = _
+                FormatDuration(remaining)
+
+        End If
+
+
+    Else
+
+        document.getElementById("subscriptionStatus").innerHTML = _
+            "<span class='error'>TRIAL / EXPIRED</span>"
+
+        document.getElementById("subscriptionPlanDisplay").innerHTML = _
+            "TRIAL VERSION"
+
+        document.getElementById("subscriptionTimeDisplay").innerHTML = _
+            "SUBSCRIBE TO CONTINUE"
+
+    End If
+
+End Sub
+
+
+'========================================================
+' SUBSCRIPTION WINDOW
+'========================================================
+
+Sub UpdateSubscriptionWindow
+
+    Dim remaining
+
+
+    If subscriptionActive = True Then
+
+        If UCase(Trim(subscriptionPlan)) = "LIFETIME" Then
+
+            document.getElementById("trialNotice").innerHTML = _
+                "LIFETIME SUBSCRIPTION ACTIVE - NO EXPIRATION"
+
+
+            document.getElementById("selectedPlan").innerHTML = _
+                "CURRENT PLAN: LIFETIME - AED 3,000"
+
+
+        Else
+
+            remaining = subscriptionEnd - UnixTime()
+
+            If remaining < 0 Then remaining = 0
+
+
+            document.getElementById("trialNotice").innerHTML = _
+                "SUBSCRIPTION ACTIVE - " & _
+                subscriptionPlan & _
+                " - REMAINING: " & _
+                FormatDuration(remaining)
+
+
+            document.getElementById("selectedPlan").innerHTML = _
+                "CURRENT PLAN: " & subscriptionPlan
+
+        End If
+
+
+    Else
+
+        document.getElementById("trialNotice").innerHTML = _
+            "TRIAL VERSION - SUBSCRIBE TO CONTINUE"
+
+
+        document.getElementById("selectedPlan").innerHTML = _
+            "SELECT A PLAN BELOW"
+
+    End If
+
+End Sub
+
+
+'========================================================
+' TIMER
+'========================================================
+
+Sub UpdateSubscriptionTimer
+
+    CheckSubscription
+
+
+    If subscriptionActive = True Then
+
+        UpdateSubscriptionDisplay
+
+
+        If document.getElementById("subscriptionOverlay").style.display = "block" Then
+
+            UpdateSubscriptionWindow
+
+        End If
+
+    End If
+
+
+    window.setTimeout "UpdateSubscriptionTimer", 1000
+
+End Sub
+
+
+'========================================================
+' UNIX TIME
+'========================================================
+
+Function UnixTime
+
+    UnixTime = DateDiff( _
+        "s", _
+        "01/01/1970 00:00:00", _
+        Now())
+
+End Function
+
+
+'========================================================
+' FORMAT TIME
+'========================================================
+
+Function FormatDuration(totalSeconds)
+
+    Dim days
+    Dim hours
+    Dim minutes
+    Dim seconds
+    Dim result
+
+
+    totalSeconds = Int(totalSeconds)
+
+
+    If totalSeconds < 0 Then
+
+        totalSeconds = 0
+
+    End If
+
+
+    days = Int(totalSeconds / 86400)
+
+    totalSeconds = totalSeconds Mod 86400
+
+
+    hours = Int(totalSeconds / 3600)
+
+    totalSeconds = totalSeconds Mod 3600
+
+
+    minutes = Int(totalSeconds / 60)
+
+    seconds = totalSeconds Mod 60
+
+
+    result = ""
+
+
+    If days > 0 Then
+
+        result = result & days & "D "
+
+    End If
+
+
+    result = result & _
+        Right("0" & hours, 2) & ":" & _
+        Right("0" & minutes, 2) & ":" & _
+        Right("0" & seconds, 2)
+
+
+    FormatDuration = result
+
+End Function
+
+
+'========================================================
+' EXPIRED SCREEN
+'========================================================
+
+Sub ShowExpiredScreen
+
+    document.getElementById("expiredOverlay").style.display = "block"
+
+    document.getElementById("expiredPlan").innerHTML = _
+        subscriptionPlan
+
+End Sub
+
+
+Sub ExpiredSubscribe
+
+    document.getElementById("expiredOverlay").style.display = "none"
+
+    OpenSubscription
+
+End Sub
+
+
+'========================================================
+' ABOUT
+'========================================================
+
+Sub AboutLauncher
+
+    MsgBox _
+        "JAIDEN GAMING DASHBOARD" & vbCrLf & vbCrLf & _
+        "Version " & launcherVersion & vbCrLf & _
+        "GTA V + SJ Gaming Launcher" & vbCrLf & vbCrLf & _
+        "Developed By SJ Gaming" & vbCrLf & _
+        "Designed & Created By SJ Gaming" & vbCrLf & _
+        "Ideas & Concept By SJ Gaming", _
+        vbInformation, _
+        "About JAIDEN GAMING"
+
+End Sub
+
+
+'========================================================
+' EXIT
+'========================================================
+
+Sub ExitGame
+
+    window.close
+
+End Sub
+
+
+'========================================================
+' VERSION DISPLAY
+'========================================================
+
+Sub SetVersionDisplay
+
+    document.getElementById("footerVersion").innerHTML = _
+        launcherVersion
+
+    document.getElementById("settingsVersion").innerHTML = _
+        launcherVersion
+
+    UpdateSubscriptionDisplay
+
+End Sub
+
+</script>
+
+</head>
+
+
+<body>
+
+
+<!-- TOP BAR -->
+
+<div class="topbar">
+
+    <div class="brand">
+        JAIDEN
+        <span class="brandSub">GAMING</span>
+    </div>
+
+    <div class="userArea">
+
+        <div class="userName">
+            JAIDEN
+        </div>
+
+        <div class="online">
+            ONLINE
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <div class="menuHeader">
+        NAVIGATION
+    </div>
+
+
+    <button class="menuButton menuActive">
+        DASHBOARD
+    </button>
+
+
+    <button class="menuButton"
+            onclick="OpenGameFolder">
+
+        GAME FOLDER
+
+    </button>
+
+
+    <button class="menuButton"
+            onclick="CheckForUpdates">
+
+        UPDATES
+
+    </button>
+
+
+    <div class="menuLine"></div>
+
+
+    <div class="menuHeader">
+        SYSTEM
+    </div>
+
+
+    <button class="menuButton"
+            onclick="OpenSettings">
+
+        SETTINGS
+
+    </button>
+
+
+    <button class="menuButton"
+            onclick="AboutLauncher">
+
+        ABOUT
+
+    </button>
+
+
+    <button class="exitButton"
+            onclick="ExitGame">
+
+        EXIT LAUNCHER
+
+    </button>
+
+</div>
+
+
+<!-- MAIN CONTENT -->
+
+<div class="content">
+
+    <div class="smallTitle">
+        JAIDEN GAMING / DASHBOARD
+    </div>
+
+
+    <div class="mainTitle">
+        GAMING <span>CENTER</span>
+    </div>
+
+
+    <div class="gameCard">
+
+        <div class="gameLabel">
+            AVAILABLE GAME
+        </div>
+
+
+        <div class="gameName">
+            GRAND THEFT AUTO V
+        </div>
+
+
+        <div class="gameDescription">
+            Roleplay launcher with SJ Gaming
+        </div>
+
+
+        <button class="subscriptionButton"
+                onclick="OpenSubscription">
+
+            SUBSCRIPTION
+
+        </button>
+
+
+        <button id="playButton"
+                class="playButton"
+                onclick="PlayGame">
+
+            PLAY GAME
+
+        </button>
+
+    </div>
+
+
+    <!-- STATUS -->
+
+    <div class="statusPanel">
+
+        <div class="statusHeader">
+            SYSTEM STATUS
+        </div>
+
+
+        <div class="statusRow">
+
+            <span class="statusName">
+                GRAND THEFT AUTO V
+            </span>
+
+
+            <span id="gtaStatus">
+                CHECKING...
+            </span>
+
+        </div>
+
+
+        <div class="statusRow">
+
+            <span class="statusName">
+                SJ GAMING
+            </span>
+
+
+            <span id="sjStatus">
+                CHECKING...
+            </span>
+
+        </div>
+
+
+        <div class="statusRow">
+
+            <span class="statusName">
+                SUBSCRIPTION
+            </span>
+
+
+            <span id="subscriptionStatus">
+                CHECKING...
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFO -->
+
+    <div class="infoContainer">
+
+        <div class="infoCard">
+
+            <div class="infoTitle">
+                PLAN
+            </div>
+
+
+            <div id="subscriptionPlanDisplay"
+                 class="infoValue">
+
+                TRIAL VERSION
+
+            </div>
+
+        </div>
+
+
+        <div class="infoCard">
+
+            <div class="infoTitle">
+                REMAINING TIME
+            </div>
+
+
+            <div id="subscriptionTimeDisplay"
+                 class="infoValue">
+
+                SUBSCRIBE TO CONTINUE
+
+            </div>
+
+        </div>
+
+
+        <div class="infoCard">
+
+            <div class="infoTitle">
+                DEVELOPED BY
+            </div>
+
+
+            <div class="infoValue">
+                SJ GAMING
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        JAIDEN GAMING DASHBOARD -
+        DEVELOPED BY SJ GAMING -
+        VERSION <span id="footerVersion">1.0</span>
+
+    </div>
+
+</div>
+
+
+<!-- GAME LOADING -->
+
+<div id="loadingScreen"
+     class="overlay">
+
+    <div class="updateBox">
+
+        <div class="updateBrand">
+            JAIDEN GAMING
+        </div>
+
+
+        <div class="updateTitle">
+            Enjoy The Game Jaiden!
+        </div>
+
+
+        <div class="updateText">
+            Please wait, the game is loading...
+        </div>
+
+
+        <div class="updateAnimation">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+
+        <div id="loadingStatus"
+             style="color:#00ff88;font-size:11px;margin-top:10px;">
+
+            PREPARING GAME...
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- UPDATE CENTER -->
+
+<div id="updateOverlay"
+     class="overlay">
+
+    <div class="updateBox">
+
+        <div class="updateBrand">
+            JAIDEN GAMING
+        </div>
+
+
+        <div class="updateTitle">
+            UPDATE CENTER
+        </div>
+
+
+        <div id="updateText"
+             class="updateText">
+
+            Checking for updates...
+
+        </div>
+
+
+        <div id="updateChecking"
+             class="updateAnimation">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+
+        <div id="updateAvailable"
+             style="display:none;">
+
+            <div style="
+                color:#00ff88;
+                font-size:18px;
+                font-weight:bold;
+                margin-bottom:5px;">
+
+                NEW VERSION AVAILABLE
+
+            </div>
+
+
+            <div class="whatsNewBox">
+
+                <div class="whatsNewHeader">
+                    WHAT'S NEW
+                </div>
+
+
+                <div id="whatsNewContent"
+                     class="whatsNewContent">
+
+                    <div>
+                        <span class="whatsNewBullet">+</span>
+                        New launcher features
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button class="updateButton updateNow"
+                    onclick="UpdateNow">
+
+                UPDATE NOW
+
+            </button>
+
+
+            <button class="updateButton updateLater"
+                    onclick="UpdateLater">
+
+                UPDATE LATER
+
+            </button>
+
+        </div>
+
+
+        <div id="updateInstalling"
+             style="display:none;">
+
+            <div class="updateAnimation">
+
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+
+            <div style="
+                color:#00ff88;
+                font-size:18px;
+                font-weight:bold;">
+
+                INSTALLING UPDATE...
+
+            </div>
+
+
+            <div style="
+                color:#777777;
+                font-size:11px;
+                margin-top:12px;">
+
+                Please wait...
+
+            </div>
+
+        </div>
+
+
+        <div id="updateCompleted"
+             style="display:none;">
+
+            <div style="
+                color:#00ff88;
+                font-size:20px;
+                font-weight:bold;
+                letter-spacing:2px;">
+
+                UPDATE COMPLETED
+
+            </div>
+
+
+            <div style="
+                color:#777777;
+                font-size:11px;
+                margin-top:12px;">
+
+                Restarting JAIDEN GAMING...
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- LOGIN -->
+
+<div id="loginOverlay"
+     class="overlay">
+
+    <div class="loginBox">
+
+        <div class="loginBrand">
+            JAIDEN GAMING SECURITY
+        </div>
+
+
+        <div class="loginTitle">
+            ADMIN ACCESS
+        </div>
+
+
+        <div class="loginDescription">
+            Administrator authentication is required
+            to access Settings.
+        </div>
+
+
+        <label class="inputLabel">
+            LOGIN ID
+        </label>
+
+
+        <input
+            id="loginID"
+            class="loginInput"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+            maxlength="50"
+            value="1111111111111111111111"
+            onkeyup="ProtectLoginID"
+            onkeydown="ProtectLoginID">
+
+
+        <label class="inputLabel">
+            PASSWORD
+        </label>
+
+
+        <input
+            id="loginPassword"
+            class="loginInput"
+            type="password"
+            autocomplete="off"
+            maxlength="50"
+            value="11111111111111111111"
+            onkeyup="ProtectPassword"
+            onkeydown="ProtectPassword">
+
+
+        <button class="loginButton"
+                onclick="AdminLogin">
+
+            LOGIN
+
+        </button>
+
+
+        <button class="cancelButton"
+                onclick="CancelLogin">
+
+            CANCEL
+
+        </button>
+
+
+        <div id="loginError"
+             class="loginError">
+
+            ACCESS DENIED
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SECURITY LOCK -->
+
+<div id="lockOverlay"
+     class="overlay">
+
+    <div class="lockBox">
+
+        <div class="lockBrand">
+            JAIDEN GAMING SECURITY
+        </div>
+
+
+        <div class="lockTitle">
+            ADMIN ACCESS LOCKED
+        </div>
+
+
+        <div class="lockMessage">
+
+            End to End Encryption Data Protection Activated
+
+            <br><br>
+
+            Contact Admin for unlock
+
+        </div>
+
+
+        <div class="lockSub">
+            Maximum login attempts exceeded.
+        </div>
+
+
+        <button class="closeSettings"
+                onclick="CloseLockScreen">
+
+            CLOSE
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- SETTINGS -->
+
+<div id="settingsOverlay"
+     class="overlay">
+
+    <div class="settingsBox">
+
+        <div class="settingsTitle">
+            JAIDEN GAMING SETTINGS
+        </div>
+
+
+        <div class="settingRow">
+
+            <span class="settingName">
+                GAME
+            </span>
+
+
+            <span class="settingValue">
+                GRAND THEFT AUTO V
+            </span>
+
+        </div>
+
+
+        <div class="settingRow">
+
+            <span class="settingName">
+                SJ GAMING
+            </span>
+
+
+            <span class="settingValue">
+                ENABLED
+            </span>
+
+        </div>
+
+
+        <div class="settingRow">
+
+            <span class="settingName">
+                LAUNCH DELAY
+            </span>
+
+
+            <span class="settingValue">
+                10 SECONDS
+            </span>
+
+        </div>
+
+
+        <div class="settingRow">
+
+            <span class="settingName">
+                LAUNCHER VERSION
+            </span>
+
+
+            <span id="settingsVersion"
+                  class="settingValue">
+
+                1.0
+
+            </span>
+
+        </div>
+
+
+        <button class="closeSettings"
+                onclick="CloseSettings">
+
+            CLOSE SETTINGS
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- SUBSCRIPTION -->
+
+<div id="subscriptionOverlay"
+     class="overlay">
+
+    <div class="subscriptionBox">
+
+        <div class="subscriptionBrand">
+            JAIDEN GAMING
+        </div>
+
+
+        <div class="subscriptionTitle">
+            SUBSCRIPTION CENTER
+        </div>
+
+
+        <div id="trialNotice"
+             class="trialNotice">
+
+            TRIAL VERSION - SUBSCRIBE TO CONTINUE
+
+        </div>
+
+
+        <button class="plan"
+                onclick="SelectOneMinute">
+
+            <span class="planName">
+                1 MINUTE
+            </span>
+
+            <span class="planPrice">
+                AED 1
+            </span>
+
+        </button>
+
+
+        <button class="plan"
+                onclick="SelectOneDay">
+
+            <span class="planName">
+                1 HOUR
+            </span>
+
+            <span class="planPrice">
+                AED 30
+            </span>
+
+        </button>
+
+
+        <button class="plan"
+                onclick="SelectThreeDays">
+
+            <span class="planName">
+                3 HOURS
+            </span>
+
+            <span class="planPrice">
+                AED 50
+            </span>
+
+        </button>
+
+
+        <button class="plan"
+                onclick="SelectSevenDays">
+
+            <span class="planName">
+                7 DAYS
+            </span>
+
+            <span class="planPrice">
+                AED 70
+            </span>
+
+        </button>
+
+
+        <button class="plan"
+                onclick="SelectOneMonth">
+
+            <span class="planName">
+                1 MONTH
+            </span>
+
+            <span class="planPrice">
+                AED 100
+            </span>
+
+        </button>
+
+
+        <button class="plan"
+                onclick="SelectSixMonths">
+
+            <span class="planName">
+                6 MONTHS
+            </span>
+
+            <span class="planPrice">
+                AED 500
+            </span>
+
+        </button>
+
+
+        <button class="plan"
+                onclick="SelectOneYear">
+
+            <span class="planName">
+                1 YEAR
+            </span>
+
+            <span class="planPrice">
+                AED 1,000
+            </span>
+
+        </button>
+
+
+        <!-- LIFETIME -->
+
+        <button class="plan"
+                onclick="SelectLifetime">
+
+            <span class="planName">
+                LIFETIME
+            </span>
+
+            <span class="planPrice">
+                AED 3,000
+            </span>
+
+        </button>
+
+
+        <div class="codeArea">
+
+            <div class="codeTitle">
+                ENTER 10-DIGIT ACTIVATION CODE
+            </div>
+
+
+            <input
+                id="activationCode"
+                class="codeInput"
+                type="text"
+                maxlength="10"
+                autocomplete="off"
+                spellcheck="false">
+
+
+            <div id="selectedPlan"
+                 class="selectedPlan">
+
+                SELECT A PLAN BELOW
+
+            </div>
+
+
+            <div id="codeError"
+                 class="codeError">
+
+                INVALID ACTIVATION CODE
+
+            </div>
+
+
+            <button class="activateButton"
+                    onclick="ActivateSubscription">
+
+                ACTIVATE SUBSCRIPTION
+
+            </button>
+
+        </div>
+
+
+        <button class="subscriptionClose"
+                onclick="CloseSubscription">
+
+            CLOSE
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- EXPIRED -->
+
+<div id="expiredOverlay"
+     class="overlay">
+
+    <div class="expiredBox">
+
+        <div class="updateBrand">
+            JAIDEN GAMING
+        </div>
+
+
+        <div class="expiredTitle">
+            SUBSCRIPTION EXPIRED
+        </div>
+
+
+        <div class="expiredText">
+
+            Your subscription has expired.
+
+            <br>
+
+            Plan:
+            <span id="expiredPlan">
+                SUBSCRIPTION
+            </span>
+
+            <br><br>
+
+            Subscribe to continue using JAIDEN GAMING.
+
+        </div>
+
+
+        <button class="expiredButton"
+                onclick="ExpiredSubscribe">
+
+            SUBSCRIBE TO CONTINUE
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script language="VBScript">
+
+' Start subscription timer.
+
+window.setTimeout "UpdateSubscriptionTimer", 1000
+
+</script>
+
+
+</body>
+</html>

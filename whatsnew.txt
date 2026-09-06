@@ -1,0 +1,6 @@
+Added new launcher features
+Fixed game startup issue
+Improved subscription timer
+Improved update system
+Added Online Updater
+Security Fix
