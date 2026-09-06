@@ -1,4 +1,4 @@
 Improved update system
 Added Online Update
 Security Fix Updates
-5.0
+6.0
