@@ -11,10 +11,10 @@
     SHOWINTASKBAR="yes"
     SINGLEINSTANCE="yes"
     SYSMENU="yes"
-    SCROLL="no"
+    SCROLL="yes"
     WINDOWSTATE="normal"
     MINIMIZEBUTTON="yes"
-    MAXIMIZEBUTTON="no"
+    MAXIMIZEBUTTON="yes"
 >
 
 <style type="text/css">
@@ -906,6 +906,14 @@ Dim gtaExe
 Dim rageExe
 Dim launcherPath
 
+'========================================================
+' GITHUB UPDATE FILES
+'========================================================
+
+Dim githubHTA
+Dim githubVersion
+Dim githubWhatsNew
+
 Dim updateFolder
 Dim updateFile
 Dim updateVersionFile
@@ -914,6 +922,14 @@ Dim renamedUpdateFile
 
 Dim launcherVersion
 Dim updateVersion
+
+Dim githubVersionText
+Dim githubWhatsNewText
+
+
+'========================================================
+' LOGIN
+'========================================================
 
 Dim adminID
 Dim adminPassword
@@ -946,9 +962,6 @@ Dim subscriptionActive
 
 Const ACTIVATION_CODE = "0000000000"
 
-' Lifetime uses a very large value.
-' Lifetime is also handled separately in CheckSubscription,
-' so it will never expire.
 Const LIFETIME_SECONDS = 9999999999
 
 
@@ -962,6 +975,9 @@ Set fso = CreateObject("Scripting.FileSystemObject")
 
 launcherVersion = "1.0"
 updateVersion = ""
+
+githubVersionText = ""
+githubWhatsNewText = ""
 
 
 '========================================================
@@ -977,8 +993,18 @@ rageExe = gameFolder & "\RAGEPluginHook.exe"
 launcherPath = _
 "C:\Users\sujo2\OneDrive\Documents\Jaiden Launcher\JaidenLauncher.hta"
 
+
+'========================================================
+' UPDATE STORAGE
+'
+' GitHub is now the SOURCE.
+'
+' The downloaded files are temporarily stored here.
+'========================================================
+
 updateFolder = _
-"C:\Users\sujo2\OneDrive\Documents\Jaiden Launcher\Updates"
+shell.ExpandEnvironmentStrings("%TEMP%") & _
+"\JaidenGamingUpdates"
 
 updateFile = _
 updateFolder & "\JaidenLauncher.hta"
@@ -990,11 +1016,38 @@ whatsNewFile = _
 updateFolder & "\whatsnew.txt"
 
 renamedUpdateFile = _
-updateFolder & "\JaidenLauncher.hta 2"
+updateFolder & "\JaidenLauncher.hta.installed"
 
-restartFlagFile = _
-shell.ExpandEnvironmentStrings("%TEMP%") & _
-"\JaidenGamingAutoUpdate.flag"
+
+'========================================================
+' GITHUB RAW URLS
+'
+' Built in pieces so the URL remains easy to edit.
+'========================================================
+
+githubHTA = _
+"https://" & _
+"raw.githubusercontent.com/" & _
+"sujithjoseofficial/" & _
+"JaidenGaming/" & _
+"refs/heads/main/" & _
+"JaidenLauncher.hta"
+
+githubVersion = _
+"https://" & _
+"raw.githubusercontent.com/" & _
+"sujithjoseofficial/" & _
+"JaidenGaming/" & _
+"refs/heads/main/" & _
+"version.txt"
+
+githubWhatsNew = _
+"https://" & _
+"raw.githubusercontent.com/" & _
+"sujithjoseofficial/" & _
+"JaidenGaming/" & _
+"refs/heads/main/" & _
+"whatsnew.txt"
 
 
 '========================================================
@@ -1049,27 +1102,13 @@ Sub Window_OnLoad
 
     SetVersionDisplay
 
-    If fso.FileExists(restartFlagFile) Then
-
-        On Error Resume Next
-
-        fso.DeleteFile restartFlagFile, True
-
-        On Error GoTo 0
-
-        window.setTimeout "AutoOpenUpdates", 1200
-
-    Else
-
-        window.setTimeout "AutoOpenUpdates", 1200
-
-    End If
+    window.setTimeout "AutoOpenUpdates", 1200
 
 End Sub
 
 
 '========================================================
-' AUTOMATIC UPDATE CHECK
+' AUTOMATIC GITHUB UPDATE CHECK
 '========================================================
 
 Sub AutoOpenUpdates
@@ -1081,47 +1120,17 @@ End Sub
 
 Sub CheckForUpdatesSilent
 
-    Dim ts
+    Dim remoteVersionText
     Dim localNumber
     Dim remoteNumber
-    Dim remoteVersionText
-
-    If Not fso.FileExists(updateFile) Then
-
-        Exit Sub
-
-    End If
 
     remoteVersionText = ""
 
+    '----------------------------------------------------
+    ' GET version.txt DIRECTLY FROM GITHUB
+    '----------------------------------------------------
 
-    If fso.FileExists(updateVersionFile) Then
-
-        On Error Resume Next
-
-        Set ts = fso.OpenTextFile( _
-            updateVersionFile, _
-            1, _
-            False)
-
-        If Err.Number = 0 Then
-
-            If Not ts.AtEndOfStream Then
-
-                remoteVersionText = Trim(ts.ReadLine)
-
-            End If
-
-            ts.Close
-
-        End If
-
-        Err.Clear
-
-        On Error GoTo 0
-
-    End If
-
+    remoteVersionText = DownloadText(githubVersion)
 
     If remoteVersionText = "" Then
 
@@ -1130,11 +1139,23 @@ Sub CheckForUpdatesSilent
     End If
 
 
+    remoteVersionText = CleanVersionText(remoteVersionText)
+
+    If remoteVersionText = "" Then
+
+        Exit Sub
+
+    End If
+
+
+    githubVersionText = remoteVersionText
+
     updateVersion = remoteVersionText
+
 
     localNumber = GetVersionNumber(launcherVersion)
 
-    remoteNumber = GetVersionNumber(updateVersion)
+    remoteNumber = GetVersionNumber(remoteVersionText)
 
 
     If remoteNumber > localNumber Then
@@ -1142,6 +1163,988 @@ Sub CheckForUpdatesSilent
         CheckForUpdates
 
     End If
+
+End Sub
+
+
+'========================================================
+' UPDATE CHECK WINDOW
+'========================================================
+
+Sub CheckForUpdates
+
+    document.getElementById("updateOverlay").style.display = "block"
+
+    document.getElementById("updateChecking").style.display = "block"
+
+    document.getElementById("updateAvailable").style.display = "none"
+
+    document.getElementById("updateInstalling").style.display = "none"
+
+    document.getElementById("updateCompleted").style.display = "none"
+
+    document.getElementById("updateText").innerHTML = _
+        "CHECKING SJ SERVER FOR UPDATES..."
+
+    window.setTimeout "CheckGitHubUpdate", 300
+
+End Sub
+
+
+'========================================================
+' CHECK GITHUB VERSION
+'========================================================
+
+Sub CheckGitHubUpdate
+
+    Dim remoteVersionText
+    Dim localNumber
+    Dim remoteNumber
+
+    remoteVersionText = ""
+
+    document.getElementById("updateChecking").style.display = "block"
+
+    document.getElementById("updateText").innerHTML = _
+        "CONNECTING TO GITHUB..."
+
+
+    '----------------------------------------------------
+    ' DOWNLOAD VERSION.TXT
+    '----------------------------------------------------
+
+    remoteVersionText = DownloadText(githubVersion)
+
+
+    If remoteVersionText = "" Then
+
+        document.getElementById("updateChecking").style.display = "none"
+
+        document.getElementById("updateText").innerHTML = _
+            "COULD NOT CONNECT TO GITHUB." & _
+            "<br><br>" & _
+            "Please check your internet connection."
+
+        window.setTimeout "CloseUpdateAfterCheck", 4000
+
+        Exit Sub
+
+    End If
+
+
+    remoteVersionText = CleanVersionText(remoteVersionText)
+
+
+    If remoteVersionText = "" Then
+
+        document.getElementById("updateChecking").style.display = "none"
+
+        document.getElementById("updateText").innerHTML = _
+            "GITHUB VERSION FILE IS EMPTY OR INVALID."
+
+        window.setTimeout "CloseUpdateAfterCheck", 4000
+
+        Exit Sub
+
+    End If
+
+
+    githubVersionText = remoteVersionText
+
+    updateVersion = remoteVersionText
+
+
+    localNumber = GetVersionNumber(launcherVersion)
+
+    remoteNumber = GetVersionNumber(remoteVersionText)
+
+
+    document.getElementById("updateChecking").style.display = "none"
+
+
+    '====================================================
+    ' NEW VERSION
+    '====================================================
+
+    If remoteNumber > localNumber Then
+
+        document.getElementById("updateAvailable").style.display = "block"
+
+        document.getElementById("updateText").innerHTML = _
+            "NEW VERSION AVAILABLE" & _
+            "<br><br>" & _
+            "Installed: v" & launcherVersion & _
+            "<br>" & _
+            "Available: v" & remoteVersionText
+
+        '------------------------------------------------
+        ' Download What's New from GitHub
+        '------------------------------------------------
+
+        LoadGitHubWhatsNew
+
+        Exit Sub
+
+    End If
+
+
+    '====================================================
+    ' SAME VERSION
+    '====================================================
+
+    If remoteNumber = localNumber Then
+
+        document.getElementById("updateText").innerHTML = _
+            "YOUR JAIDEN GAMING LAUNCHER IS UP TO DATE." & _
+            "<br><br>" & _
+            "Current Version: v" & launcherVersion
+
+        window.setTimeout "CloseUpdateAfterCheck", 3000
+
+        Exit Sub
+
+    End If
+
+
+    '====================================================
+    ' REMOTE VERSION IS OLDER
+    '====================================================
+
+    document.getElementById("updateText").innerHTML = _
+        "NO NEWER UPDATE IS AVAILABLE." & _
+        "<br><br>" & _
+        "Installed: v" & launcherVersion & _
+        "<br>" & _
+        "GitHub: v" & remoteVersionText
+
+    window.setTimeout "CloseUpdateAfterCheck", 3000
+
+End Sub
+
+
+'========================================================
+' DOWNLOAD WHAT'S NEW FROM GITHUB
+'========================================================
+
+Sub LoadGitHubWhatsNew
+
+    Dim whatsNewText
+    Dim line
+    Dim lines
+    Dim i
+    Dim whatsNewHTML
+
+    whatsNewText = ""
+
+    document.getElementById("updateText").innerHTML = _
+        "SJ SERVER CONNECTED"
+
+
+    whatsNewText = DownloadText(githubWhatsNew)
+
+
+    If whatsNewText = "" Then
+
+        document.getElementById("whatsNewContent").innerHTML = _
+            "<div>" & _
+            "<span class='whatsNewBullet'>+</span>" & _
+            "New launcher improvements and fixes" & _
+            "</div>"
+
+        Exit Sub
+
+    End If
+
+
+    githubWhatsNewText = whatsNewText
+
+    whatsNewHTML = ""
+
+    lines = Split(Replace(whatsNewText, vbCrLf, vbLf), vbLf)
+
+
+    For i = 0 To UBound(lines)
+
+        line = Trim(lines(i))
+
+
+        If line <> "" Then
+
+            whatsNewHTML = whatsNewHTML & _
+                "<div>" & _
+                "<span class='whatsNewBullet'>+</span>" & _
+                HtmlEncode(line) & _
+                "</div>"
+
+        End If
+
+    Next
+
+
+    If whatsNewHTML = "" Then
+
+        whatsNewHTML = _
+            "<div>" & _
+            "<span class='whatsNewBullet'>+</span>" & _
+            "New launcher improvements and fixes" & _
+            "</div>"
+
+    End If
+
+
+    document.getElementById("whatsNewContent").innerHTML = _
+        whatsNewHTML
+
+End Sub
+
+
+'========================================================
+' GENERIC GITHUB TEXT DOWNLOAD
+'
+' Uses MSXML2.XMLHTTP.
+'
+' Timestamp prevents old cached data.
+'========================================================
+
+Function DownloadText(url)
+
+    Dim http
+    Dim finalURL
+    Dim resultText
+
+    DownloadText = ""
+
+    On Error Resume Next
+
+    Set http = CreateObject("MSXML2.XMLHTTP")
+
+    If Err.Number <> 0 Then
+
+        Err.Clear
+
+        Set http = CreateObject("Microsoft.XMLHTTP")
+
+    End If
+
+
+    If Err.Number <> 0 Then
+
+        Err.Clear
+
+        On Error GoTo 0
+
+        Exit Function
+
+    End If
+
+
+    finalURL = url & "?_=" & CStr(Timer * 1000)
+
+
+    http.Open "GET", finalURL, False
+
+    http.setRequestHeader "Cache-Control", "no-cache"
+
+    http.setRequestHeader "Pragma", "no-cache"
+
+    http.setRequestHeader "User-Agent", _
+        "JaidenGamingLauncher"
+
+
+    http.Send
+
+
+    If Err.Number <> 0 Then
+
+        Err.Clear
+
+        On Error GoTo 0
+
+        Exit Function
+
+    End If
+
+
+    If http.Status >= 200 And http.Status < 300 Then
+
+        resultText = http.responseText
+
+        DownloadText = resultText
+
+    Else
+
+        DownloadText = ""
+
+    End If
+
+
+    Set http = Nothing
+
+    On Error GoTo 0
+
+End Function
+
+
+'========================================================
+' DOWNLOAD BINARY / HTA FILE FROM GITHUB
+'
+' Uses ADODB.Stream.
+'========================================================
+
+Function DownloadFile(url, destination)
+
+    Dim http
+    Dim stream
+    Dim finalURL
+
+    DownloadFile = False
+
+    On Error Resume Next
+
+    Set http = CreateObject("MSXML2.XMLHTTP")
+
+    If Err.Number <> 0 Then
+
+        Err.Clear
+
+        Set http = CreateObject("Microsoft.XMLHTTP")
+
+    End If
+
+
+    If Err.Number <> 0 Then
+
+        Err.Clear
+
+        On Error GoTo 0
+
+        Exit Function
+
+    End If
+
+
+    finalURL = url & "?_=" & CStr(Timer * 1000)
+
+
+    http.Open "GET", finalURL, False
+
+    http.setRequestHeader "Cache-Control", "no-cache"
+
+    http.setRequestHeader "Pragma", "no-cache"
+
+    http.setRequestHeader "User-Agent", _
+        "JaidenGamingLauncher"
+
+
+    http.Send
+
+
+    If Err.Number <> 0 Then
+
+        Err.Clear
+
+        Set http = Nothing
+
+        On Error GoTo 0
+
+        Exit Function
+
+    End If
+
+
+    If http.Status < 200 Or http.Status >= 300 Then
+
+        Set http = Nothing
+
+        On Error GoTo 0
+
+        Exit Function
+
+    End If
+
+
+    Set stream = CreateObject("ADODB.Stream")
+
+
+    If Err.Number <> 0 Then
+
+        Err.Clear
+
+        Set http = Nothing
+
+        On Error GoTo 0
+
+        Exit Function
+
+    End If
+
+
+    stream.Type = 1
+
+    stream.Open
+
+    stream.Write http.responseBody
+
+
+    If fso.FileExists(destination) Then
+
+        fso.DeleteFile destination, True
+
+    End If
+
+
+    stream.SaveToFile destination, 2
+
+    stream.Close
+
+
+    Set stream = Nothing
+
+    Set http = Nothing
+
+
+    If fso.FileExists(destination) Then
+
+        If fso.GetFile(destination).Size > 0 Then
+
+            DownloadFile = True
+
+        End If
+
+    End If
+
+
+    On Error GoTo 0
+
+End Function
+
+
+'========================================================
+' CLEAN VERSION TEXT
+'========================================================
+
+Function CleanVersionText(value)
+
+    Dim result
+
+    result = Trim(value)
+
+    result = Replace(result, vbCr, "")
+
+    result = Replace(result, vbLf, "")
+
+    result = Replace(result, Chr(34), "")
+
+    result = Trim(result)
+
+
+    If LCase(Left(result, 1)) = "v" Then
+
+        result = Mid(result, 2)
+
+    End If
+
+
+    CleanVersionText = result
+
+End Function
+
+
+'========================================================
+' HTML ENCODE
+'========================================================
+
+Function HtmlEncode(value)
+
+    value = Replace(value, "&", "&amp;")
+
+    value = Replace(value, "<", "&lt;")
+
+    value = Replace(value, ">", "&gt;")
+
+    value = Replace(value, """", "&quot;")
+
+    HtmlEncode = value
+
+End Function
+
+
+'========================================================
+' VERSION NUMBER
+'========================================================
+
+Function GetVersionNumber(versionText)
+
+    Dim parts
+    Dim major
+    Dim minor
+    Dim patch
+    Dim cleanVersion
+
+    cleanVersion = Trim(versionText)
+
+
+    If LCase(Left(cleanVersion, 1)) = "v" Then
+
+        cleanVersion = Mid(cleanVersion, 2)
+
+    End If
+
+
+    parts = Split(cleanVersion, ".")
+
+    major = 0
+    minor = 0
+    patch = 0
+
+
+    If UBound(parts) >= 0 Then
+
+        If IsNumeric(parts(0)) Then
+
+            major = CInt(parts(0))
+
+        End If
+
+    End If
+
+
+    If UBound(parts) >= 1 Then
+
+        If IsNumeric(parts(1)) Then
+
+            minor = CInt(parts(1))
+
+        End If
+
+    End If
+
+
+    If UBound(parts) >= 2 Then
+
+        If IsNumeric(parts(2)) Then
+
+            patch = CInt(parts(2))
+
+        End If
+
+    End If
+
+
+    GetVersionNumber = _
+        (major * 10000) + _
+        (minor * 100) + _
+        patch
+
+End Function
+
+
+'========================================================
+' CLOSE UPDATE WINDOW
+'========================================================
+
+Sub CloseUpdateAfterCheck
+
+    document.getElementById("updateOverlay").style.display = "none"
+
+End Sub
+
+
+'========================================================
+' UPDATE NOW
+'========================================================
+
+Sub UpdateNow
+
+    document.getElementById("updateAvailable").style.display = "none"
+
+    document.getElementById("updateInstalling").style.display = "block"
+
+    document.getElementById("updateText").innerHTML = _
+        "DOWNLOADING UPDATE FROM GITHUB..."
+
+    window.setTimeout "PerformUpdate", 300
+
+End Sub
+
+
+'========================================================
+' PERFORM GITHUB UPDATE
+'========================================================
+
+Sub PerformUpdate
+
+    Dim errorText
+    Dim downloaded
+    Dim folderCreated
+
+    downloaded = False
+
+    errorText = ""
+
+
+    On Error Resume Next
+
+    '----------------------------------------------------
+    ' Create temporary update folder
+    '----------------------------------------------------
+
+    If Not fso.FolderExists(updateFolder) Then
+
+        fso.CreateFolder updateFolder
+
+    End If
+
+
+    If Err.Number <> 0 Then
+
+        errorText = Err.Description
+
+        Err.Clear
+
+    End If
+
+
+    On Error GoTo 0
+
+
+    If errorText <> "" Then
+
+        UpdateInstallError errorText
+
+        Exit Sub
+
+    End If
+
+
+    '====================================================
+    ' DOWNLOAD LATEST HTA FROM GITHUB
+    '====================================================
+
+    document.getElementById("updateText").innerHTML = _
+        "DOWNLOADING JAIDENLAUNCHER.HTA..."
+
+
+    downloaded = _
+        DownloadFile( _
+            githubHTA, _
+            updateFile)
+
+
+    If downloaded = False Then
+
+        UpdateInstallError _
+            "Could not download JaidenLauncher.hta from GitHub."
+
+        Exit Sub
+
+    End If
+
+
+    '====================================================
+    ' VERIFY DOWNLOADED FILE
+    '====================================================
+
+    If Not fso.FileExists(updateFile) Then
+
+        UpdateInstallError _
+            "Downloaded update file was not found."
+
+        Exit Sub
+
+    End If
+
+
+    If fso.GetFile(updateFile).Size < 100 Then
+
+        UpdateInstallError _
+            "Downloaded launcher file appears to be invalid."
+
+        Exit Sub
+
+    End If
+
+
+    '====================================================
+    ' DOWNLOAD VERSION.TXT
+    '====================================================
+
+    document.getElementById("updateText").innerHTML = _
+        "DOWNLOADING VERSION INFORMATION..."
+
+
+    DownloadFile _
+        githubVersion, _
+        updateVersionFile
+
+
+    '====================================================
+    ' DOWNLOAD WHAT'S NEW
+    '====================================================
+
+    document.getElementById("updateText").innerHTML = _
+        "DOWNLOADING WHAT'S NEW..."
+
+
+    DownloadFile _
+        githubWhatsNew, _
+        whatsNewFile
+
+
+    '====================================================
+    ' INSTALL
+    '====================================================
+
+    document.getElementById("updateText").innerHTML = _
+        "INSTALLING UPDATE..."
+
+
+    window.setTimeout "InstallDownloadedUpdate", 500
+
+End Sub
+
+
+'========================================================
+' INSTALL DOWNLOADED UPDATE
+'========================================================
+
+Sub InstallDownloadedUpdate
+
+    Dim tempInstall
+    Dim errorText
+    Dim success
+
+    success = False
+
+    errorText = ""
+
+
+    tempInstall = _
+        launcherPath & ".new"
+
+
+    On Error Resume Next
+
+    Err.Clear
+
+
+    '----------------------------------------------------
+    ' Copy GitHub update to .new first.
+    ' This prevents a partial launcher replacement.
+    '----------------------------------------------------
+
+    If fso.FileExists(tempInstall) Then
+
+        fso.DeleteFile tempInstall, True
+
+    End If
+
+
+    fso.CopyFile _
+        updateFile, _
+        tempInstall, _
+        True
+
+
+    If Err.Number <> 0 Then
+
+        errorText = Err.Description
+
+        Err.Clear
+
+    End If
+
+
+    If errorText = "" Then
+
+        If Not fso.FileExists(tempInstall) Then
+
+            errorText = _
+                "The temporary update file could not be created."
+
+        End If
+
+    End If
+
+
+    '----------------------------------------------------
+    ' Create restart helper
+    '----------------------------------------------------
+
+    If errorText = "" Then
+
+        document.getElementById("updateText").innerHTML = _
+            "UPDATE DOWNLOADED SUCCESSFULLY"
+
+        document.getElementById("updateInstalling").style.display = "none"
+
+        document.getElementById("updateCompleted").style.display = "block"
+
+        document.getElementById("updateText").innerHTML = _
+            "UPDATE COMPLETED"
+
+        window.setTimeout "RestartLauncher", 2000
+
+        On Error GoTo 0
+
+        Exit Sub
+
+    End If
+
+
+    On Error GoTo 0
+
+
+    UpdateInstallError errorText
+
+End Sub
+
+
+'========================================================
+' UPDATE ERROR
+'========================================================
+
+Sub UpdateInstallError(message)
+
+    document.getElementById("updateInstalling").style.display = "none"
+
+    document.getElementById("updateCompleted").style.display = "none"
+
+    document.getElementById("updateText").innerHTML = _
+        "UPDATE FAILED" & _
+        "<br><br>" & _
+        HtmlEncode(message)
+
+    window.setTimeout "CloseUpdateAfterCheck", 5000
+
+End Sub
+
+
+'========================================================
+' UPDATE LATER
+'========================================================
+
+Sub UpdateLater
+
+    document.getElementById("updateOverlay").style.display = "none"
+
+End Sub
+
+
+'========================================================
+' RESTART LAUNCHER
+'
+' A temporary VBS waits for this HTA to close,
+' replaces the old launcher with the downloaded one,
+' then starts the new launcher.
+'========================================================
+
+Sub RestartLauncher
+
+    Dim tempVbs
+    Dim ts
+    Dim vbsCode
+    Dim newLauncher
+    Dim newFile
+
+    newLauncher = launcherPath
+
+    newFile = launcherPath & ".new"
+
+
+    tempVbs = _
+        shell.ExpandEnvironmentStrings("%TEMP%") & _
+        "\JaidenGamingRestart.vbs"
+
+
+    On Error Resume Next
+
+
+    If fso.FileExists(restartFlagFile) Then
+
+        fso.DeleteFile restartFlagFile, True
+
+    End If
+
+
+    '----------------------------------------------------
+    ' Flag is not required for update detection anymore,
+    ' but retained as a restart marker.
+    '----------------------------------------------------
+
+    fso.CreateTextFile restartFlagFile, True
+
+
+    On Error GoTo 0
+
+
+    '====================================================
+    ' CREATE VBS RESTARTER
+    '====================================================
+
+    vbsCode = ""
+
+    vbsCode = vbsCode & _
+        "Set fso = CreateObject(""Scripting.FileSystemObject"")" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "Set sh = CreateObject(""WScript.Shell"")" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "WScript.Sleep 2500" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "On Error Resume Next" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "If fso.FileExists(""" & newLauncher & """) Then" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "fso.DeleteFile """ & newLauncher & """, True" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "End If" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "WScript.Sleep 500" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "fso.MoveFile """ & newFile & """, """ & newLauncher & """" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "WScript.Sleep 1000" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "sh.Run ""mshta.exe "" & Chr(34) & """ & _
+        newLauncher & """ & Chr(34), 1, False" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "WScript.Sleep 5000" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "If fso.FileExists(WScript.ScriptFullName) Then" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "fso.DeleteFile WScript.ScriptFullName, True" & vbCrLf
+
+    vbsCode = vbsCode & _
+        "End If" & vbCrLf
+
+
+    Set ts = fso.CreateTextFile(tempVbs, True)
+
+    ts.Write vbsCode
+
+    ts.Close
+
+
+    shell.Run _
+        "wscript.exe """ & tempVbs & """", _
+        0, _
+        False
+
+
+    window.close
 
 End Sub
 
@@ -1293,483 +2296,6 @@ Sub OpenGameFolder
             "JAIDEN GAMING"
 
     End If
-
-End Sub
-
-
-'========================================================
-' UPDATE CHECK
-'========================================================
-
-Sub CheckForUpdates
-
-    document.getElementById("updateOverlay").style.display = "block"
-
-    document.getElementById("updateChecking").style.display = "block"
-
-    document.getElementById("updateAvailable").style.display = "none"
-
-    document.getElementById("updateInstalling").style.display = "none"
-
-    document.getElementById("updateCompleted").style.display = "none"
-
-    document.getElementById("updateText").innerHTML = _
-        "Checking for updates..."
-
-    window.setTimeout "CheckUpdateFile", 1200
-
-End Sub
-
-
-Sub CheckUpdateFile
-
-    Dim ts
-    Dim localNumber
-    Dim remoteNumber
-    Dim remoteVersionText
-
-    document.getElementById("updateChecking").style.display = "none"
-
-    Set fso = CreateObject("Scripting.FileSystemObject")
-
-
-    If Not fso.FileExists(updateFile) Then
-
-        document.getElementById("updateText").innerHTML = _
-            "No update is available." & _
-            "<br><br>" & _
-            "Current Version: v" & launcherVersion
-
-        window.setTimeout "CloseUpdateAfterCheck", 2500
-
-        Exit Sub
-
-    End If
-
-
-    remoteVersionText = ""
-
-
-    If fso.FileExists(updateVersionFile) Then
-
-        On Error Resume Next
-
-        Set ts = fso.OpenTextFile( _
-            updateVersionFile, _
-            1, _
-            False)
-
-        If Err.Number = 0 Then
-
-            If Not ts.AtEndOfStream Then
-
-                remoteVersionText = Trim(ts.ReadLine)
-
-            End If
-
-            ts.Close
-
-        End If
-
-        Err.Clear
-
-        On Error GoTo 0
-
-    End If
-
-
-    If remoteVersionText = "" Then
-
-        updateVersion = ""
-
-        document.getElementById("updateAvailable").style.display = "block"
-
-        document.getElementById("updateText").innerHTML = _
-            "NEW UPDATE FILE FOUND"
-
-        LoadWhatsNew
-
-        Exit Sub
-
-    End If
-
-
-    updateVersion = remoteVersionText
-
-    localNumber = GetVersionNumber(launcherVersion)
-
-    remoteNumber = GetVersionNumber(updateVersion)
-
-
-    If remoteNumber > localNumber Then
-
-        document.getElementById("updateAvailable").style.display = "block"
-
-        document.getElementById("updateText").innerHTML = _
-            "NEW VERSION AVAILABLE" & _
-            "<br><br>" & _
-            "Installed: v" & launcherVersion & _
-            "<br>" & _
-            "Available: v" & updateVersion
-
-        LoadWhatsNew
-
-        Exit Sub
-
-    End If
-
-
-    If remoteNumber = localNumber Then
-
-        document.getElementById("updateText").innerHTML = _
-            "Your JAIDEN GAMING launcher is up to date." & _
-            "<br><br>" & _
-            "Current Version: v" & launcherVersion
-
-        window.setTimeout "CloseUpdateAfterCheck", 3000
-
-        Exit Sub
-
-    End If
-
-
-    document.getElementById("updateText").innerHTML = _
-        "No newer update is available." & _
-        "<br><br>" & _
-        "Installed: v" & launcherVersion & _
-        "<br>" & _
-        "Update file: v" & updateVersion
-
-    window.setTimeout "CloseUpdateAfterCheck", 3000
-
-End Sub
-
-
-'========================================================
-' WHAT'S NEW
-'========================================================
-
-Sub LoadWhatsNew
-
-    Dim ts
-    Dim line
-    Dim whatsNewHTML
-
-    whatsNewHTML = ""
-
-    If fso.FileExists(whatsNewFile) Then
-
-        On Error Resume Next
-
-        Set ts = fso.OpenTextFile( _
-            whatsNewFile, _
-            1, _
-            False)
-
-        If Err.Number = 0 Then
-
-            Do Until ts.AtEndOfStream
-
-                line = Trim(ts.ReadLine)
-
-                If line <> "" Then
-
-                    whatsNewHTML = whatsNewHTML & _
-                        "<div>" & _
-                        "<span class='whatsNewBullet'>+</span>" & _
-                        HtmlEncode(line) & _
-                        "</div>"
-
-                End If
-
-            Loop
-
-            ts.Close
-
-        End If
-
-        Err.Clear
-
-        On Error GoTo 0
-
-    End If
-
-
-    If whatsNewHTML = "" Then
-
-        whatsNewHTML = _
-            "<div>" & _
-            "<span class='whatsNewBullet'>+</span>" & _
-            "New launcher improvements and fixes" & _
-            "</div>"
-
-    End If
-
-
-    document.getElementById("whatsNewContent").innerHTML = _
-        whatsNewHTML
-
-End Sub
-
-
-Function HtmlEncode(value)
-
-    value = Replace(value, "&", "&amp;")
-    value = Replace(value, "<", "&lt;")
-    value = Replace(value, ">", "&gt;")
-    value = Replace(value, """", "&quot;")
-
-    HtmlEncode = value
-
-End Function
-
-
-Function GetVersionNumber(versionText)
-
-    Dim parts
-    Dim major
-    Dim minor
-    Dim patch
-    Dim cleanVersion
-
-    cleanVersion = Trim(versionText)
-
-    If LCase(Left(cleanVersion, 1)) = "v" Then
-
-        cleanVersion = Mid(cleanVersion, 2)
-
-    End If
-
-    parts = Split(cleanVersion, ".")
-
-    major = 0
-    minor = 0
-    patch = 0
-
-
-    If UBound(parts) >= 0 Then
-
-        If IsNumeric(parts(0)) Then
-
-            major = CInt(parts(0))
-
-        End If
-
-    End If
-
-
-    If UBound(parts) >= 1 Then
-
-        If IsNumeric(parts(1)) Then
-
-            minor = CInt(parts(1))
-
-        End If
-
-    End If
-
-
-    If UBound(parts) >= 2 Then
-
-        If IsNumeric(parts(2)) Then
-
-            patch = CInt(parts(2))
-
-        End If
-
-    End If
-
-
-    GetVersionNumber = _
-        (major * 10000) + _
-        (minor * 100) + _
-        patch
-
-End Function
-
-
-Sub CloseUpdateAfterCheck
-
-    document.getElementById("updateOverlay").style.display = "none"
-
-End Sub
-
-
-'========================================================
-' UPDATE NOW
-'========================================================
-
-Sub UpdateNow
-
-    If Not fso.FileExists(updateFile) Then
-
-        MsgBox _
-            "No update file was found." & _
-            vbCrLf & vbCrLf & _
-            updateFile, _
-            vbExclamation, _
-            "JAIDEN GAMING"
-
-        Exit Sub
-
-    End If
-
-
-    document.getElementById("updateAvailable").style.display = "none"
-
-    document.getElementById("updateInstalling").style.display = "block"
-
-    document.getElementById("updateText").innerHTML = _
-        "INSTALLING UPDATE..."
-
-    window.setTimeout "PerformUpdate", 700
-
-End Sub
-
-
-Sub PerformUpdate
-
-    Dim errorText
-
-    On Error Resume Next
-
-    Err.Clear
-
-
-    If fso.FileExists(renamedUpdateFile) Then
-
-        fso.DeleteFile renamedUpdateFile, True
-
-    End If
-
-
-    Err.Clear
-
-
-    fso.CopyFile _
-        updateFile, _
-        launcherPath, _
-        True
-
-
-    If Err.Number <> 0 Then
-
-        errorText = Err.Description
-
-        On Error GoTo 0
-
-        document.getElementById("updateInstalling").style.display = "none"
-
-        MsgBox _
-            "The update could not be installed." & _
-            vbCrLf & vbCrLf & _
-            errorText, _
-            vbCritical, _
-            "JAIDEN GAMING"
-
-        document.getElementById("updateOverlay").style.display = "none"
-
-        Exit Sub
-
-    End If
-
-
-    Err.Clear
-
-
-    fso.MoveFile _
-        updateFile, _
-        renamedUpdateFile
-
-
-    On Error GoTo 0
-
-
-    document.getElementById("updateInstalling").style.display = "none"
-
-    document.getElementById("updateCompleted").style.display = "block"
-
-    document.getElementById("updateText").innerHTML = _
-        "UPDATE COMPLETED"
-
-    window.setTimeout "RestartLauncher", 3000
-
-End Sub
-
-
-Sub UpdateLater
-
-    document.getElementById("updateOverlay").style.display = "none"
-
-End Sub
-
-
-'========================================================
-' RESTART
-'========================================================
-
-Sub RestartLauncher
-
-    Dim tempVbs
-    Dim ts
-    Dim vbsCode
-    Dim newLauncher
-
-    newLauncher = launcherPath
-
-    tempVbs = _
-        shell.ExpandEnvironmentStrings("%TEMP%") & _
-        "\JaidenGamingRestart.vbs"
-
-
-    On Error Resume Next
-
-    If fso.FileExists(restartFlagFile) Then
-
-        fso.DeleteFile restartFlagFile, True
-
-    End If
-
-    fso.CreateTextFile restartFlagFile, True
-
-    On Error GoTo 0
-
-
-    vbsCode = ""
-
-    vbsCode = vbsCode & _
-        "Set sh = CreateObject(""WScript.Shell"")" & vbCrLf
-
-    vbsCode = vbsCode & _
-        "WScript.Sleep 2000" & vbCrLf
-
-    vbsCode = vbsCode & _
-        "sh.Run ""mshta.exe "" & Chr(34) & """ & _
-        newLauncher & """ & Chr(34), 1, False" & vbCrLf
-
-    vbsCode = vbsCode & _
-        "WScript.Sleep 5000" & vbCrLf
-
-    vbsCode = vbsCode & _
-        "On Error Resume Next" & vbCrLf
-
-    vbsCode = vbsCode & _
-        "CreateObject(""Scripting.FileSystemObject"").DeleteFile WScript.ScriptFullName, True" & vbCrLf
-
-
-    Set ts = fso.CreateTextFile(tempVbs, True)
-
-    ts.Write vbsCode
-
-    ts.Close
-
-
-    shell.Run _
-        "wscript.exe """ & tempVbs & """", _
-        0, _
-        False
-
-    window.close
 
 End Sub
 
@@ -2014,7 +2540,9 @@ End Sub
 Sub SelectPlan(planName, price, seconds)
 
     selectedPlan = planName
+
     selectedPrice = price
+
     selectedSeconds = seconds
 
 
@@ -2080,13 +2608,15 @@ End Sub
 
 
 '========================================================
-' LIFETIME PLAN
+' LIFETIME
 '========================================================
 
 Sub SelectLifetime
 
     selectedPlan = "LIFETIME"
+
     selectedPrice = 3000
+
     selectedSeconds = LIFETIME_SECONDS
 
 
@@ -2194,6 +2724,7 @@ Sub SaveSubscription
 
     On Error Resume Next
 
+
     If Not fso.FolderExists(subscriptionFolder) Then
 
         fso.CreateFolder subscriptionFolder
@@ -2211,6 +2742,7 @@ Sub SaveSubscription
 
     ts.Close
 
+
     On Error GoTo 0
 
 End Sub
@@ -2225,8 +2757,11 @@ Sub LoadSubscription
     Dim ts
 
     subscriptionPlan = ""
+
     subscriptionStart = 0
+
     subscriptionEnd = 0
+
     subscriptionActive = False
 
 
@@ -2292,10 +2827,6 @@ End Sub
 
 Sub CheckSubscription
 
-    '====================================================
-    ' LIFETIME NEVER EXPIRES
-    '====================================================
-
     If UCase(Trim(subscriptionPlan)) = "LIFETIME" Then
 
         subscriptionActive = True
@@ -2306,10 +2837,6 @@ Sub CheckSubscription
 
     End If
 
-
-    '====================================================
-    ' NORMAL TIME-BASED SUBSCRIPTIONS
-    '====================================================
 
     If subscriptionEnd <= 0 Then
 
@@ -2351,7 +2878,7 @@ End Sub
 
 
 '========================================================
-' UPDATE DASHBOARD STATUS
+' DASHBOARD SUBSCRIPTION DISPLAY
 '========================================================
 
 Sub UpdateSubscriptionDisplay
@@ -2458,7 +2985,7 @@ End Sub
 
 
 '========================================================
-' TIMER
+' SUBSCRIPTION TIMER
 '========================================================
 
 Sub UpdateSubscriptionTimer
@@ -2955,7 +3482,7 @@ End Sub
         <div id="updateText"
              class="updateText">
 
-            Checking for updates...
+            Checking GitHub for updates...
 
         </div>
 
@@ -2997,7 +3524,7 @@ End Sub
 
                     <div>
                         <span class="whatsNewBullet">+</span>
-                        New launcher features
+                        Loading changes from GitHub...
                     </div>
 
                 </div>
@@ -3051,7 +3578,7 @@ End Sub
                 font-size:11px;
                 margin-top:12px;">
 
-                Please wait...
+                Downloading from GitHub...
 
             </div>
 
@@ -3423,8 +3950,6 @@ End Sub
         </button>
 
 
-        <!-- LIFETIME -->
-
         <button class="plan"
                 onclick="SelectLifetime">
 
@@ -3541,8 +4066,6 @@ End Sub
 
 
 <script language="VBScript">
-
-' Start subscription timer.
 
 window.setTimeout "UpdateSubscriptionTimer", 1000
 
